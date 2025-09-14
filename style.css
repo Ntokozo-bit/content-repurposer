@@ -48,6 +48,17 @@ body {
     grid-column: 2 / 3;
     padding: 1rem clamp(1rem, 2vw, 2rem) 2rem;
 }
+
+footer{
+    text-align: center;
+    font-size: 16px;
+    color: blue;
+    font-weight: 600;
+}
+
+footer a{
+    text-decoration: none;
+}
 @media (max-width: 700px) {
     /* small fixed padding so anchor ads won't cover controls */
     .container { padding-bottom: 84px; }
