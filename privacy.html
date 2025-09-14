@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Privacy Policy – Universal Content Repurposer</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Auto Ads (same publisher ID) -->
+    <script async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7179154805169763"
+        crossorigin="anonymous"></script>
+</head>
+<body>
+    <header class="topbar">
+        <nav class="nav">
+            <a class="nav__brand" href="index.html">UCR 🚀</a>
+            <div class="nav__links">
+                <a class="nav__link" href="index.html">Home</a>
+                <a class="nav__link" href="about.html">About</a>
+                <a class="nav__link nav__link--active" href="privacy.html">Privacy</a>
+            </div>
+            <button id="theme-toggle" class="btn btn-ghost" aria-pressed="false" aria-label="Toggle dark mode">🌙</button>
+        </nav>
+    </header>
+
+    <div class="page">
+        <main class="container">
+            <header class="site-header">
+                <div class="brand">
+                    <h1>Privacy Policy</h1>
+                    <p>Last updated: September 14, 2025</p>
+                </div>
+            </header>
+
+            <section class="card">
+                <div class="card-content">
+                    <h2>Advertising</h2>
+                    <p>
+                        We use <strong>Google AdSense</strong> to display ads. Google may use cookies to serve ads based on your prior visits.
+                        You can opt out of personalized advertising at
+                        <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ad Settings</a>.
+                    </p>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card-content">
+                    <h2>Information We Collect</h2>
+                    <p>
+                        We do <strong>not</strong> collect personal information beyond what your browser normally sends (e.g., IP address, User-Agent).
+                        Any text you type into this tool stays in your browser and is not sent to our servers.
+                    </p>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card-content">
+                    <h2>Your Choices</h2>
+                    <p>
+                        You may disable cookies in your browser settings if you prefer not to allow advertising cookies.
+                        However, doing so may affect how ads are shown.
+                    </p>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card-content">
+                    <h2>Contact Us</h2>
+                    <p>
+                        If you have questions about this Privacy Policy, contact us at:
+                        <a href="mailto:youremail@example.com">youremail@example.com</a>
+                    </p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer__links">
+            <a href="index.html">Home</a>
+            <span>•</span>
+            <a href="about.html">About</a>
+            <span>•</span>
+            <a href="privacy.html">Privacy Policy</a>
+        </div>
+        <div class="footer__copy">&copy; <span id="year"></span> Universal Content Repurposer.</div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        const themeToggle = document.getElementById('theme-toggle');
+        const LS_KEY_THEME = 'ucr_theme';
+        const setTheme = (mode) => {
+            document.documentElement.setAttribute('data-theme', mode);
+            try { localStorage.setItem(LS_KEY_THEME, mode); } catch {}
+            themeToggle.setAttribute('aria-pressed', String(mode === 'dark'));
+            themeToggle.textContent = mode === 'dark' ? '☀️' : '🌙';
+        };
+        const initialTheme = (() => {
+            try { const s = localStorage.getItem(LS_KEY_THEME); if (s) return s; } catch {}
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        })();
+        setTheme(initialTheme);
+        themeToggle.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme') || 'light';
+            setTheme(current === 'light' ? 'dark' : 'light');
+        });
+    </script>
+</body>
+</html>

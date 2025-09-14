@@ -155,15 +155,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // TWITTER
     const formatForTwitter = (text) => {
+        if (!twitterContent) return;
         if (text.trim() === '') {
             twitterContent.innerHTML = '<p class="muted">Your generated thread will appear here...</p>';
-            twProgress.style.width = '0%';
+            if (twProgress) twProgress.style.width = '0%';
             return;
         }
         const sections = splitIntoSections(text);
         if (!sections.length) {
             twitterContent.innerHTML = '<p class="muted">Your generated thread will appear here...</p>';
-            twProgress.style.width = '0%';
+            if (twProgress) twProgress.style.width = '0%';
             return;
         }
 
@@ -223,14 +224,15 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
 
         const last = finalized[finalized.length - 1] || '';
-        twProgress.style.width = Math.min(100, Math.round((last.length / TWITTER_CHAR_LIMIT) * 100)) + '%';
+        if (twProgress) twProgress.style.width = Math.min(100, Math.round((last.length / TWITTER_CHAR_LIMIT) * 100)) + '%';
     };
 
     // LINKEDIN (one blank line above and below each title)
     const formatForLinkedIn = (text) => {
+        if (!linkedinContent) return;
         if (text.trim() === '') {
             linkedinContent.textContent = '';
-            liProgress.style.width = '0%';
+            if (liProgress) liProgress.style.width = '0%';
             return;
         }
         const normalized = text
@@ -260,20 +262,21 @@ document.addEventListener('DOMContentLoaded', () => {
         finalText = finalText.replace(/^\n+/, '').replace(/\n+$/, '').replace(/\n{3,}/g, '\n\n');
         linkedinContent.textContent = finalText;
 
-        liProgress.style.width = Math.min(100, Math.round((finalText.length / LINKEDIN_SOFT_LIMIT) * 100)) + '%';
+        if (liProgress) liProgress.style.width = Math.min(100, Math.round((finalText.length / LINKEDIN_SOFT_LIMIT) * 100)) + '%';
     };
 
     // INSTAGRAM (title optional)
     const formatForInstagram = (text) => {
+        if (!instagramContent) return;
         if (text.trim() === '') {
             instagramContent.innerHTML = '<p class="muted">Your generated slides will appear here...</p>';
-            igProgress.style.width = '0%';
+            if (igProgress) igProgress.style.width = '0%';
             return;
         }
         const blocks = splitIntoSections(text);
         if (!blocks.length) {
             instagramContent.innerHTML = '<p class="muted">Your generated slides will appear here...</p>';
-            igProgress.style.width = '0%';
+            if (igProgress) igProgress.style.width = '0%';
             return;
         }
 
@@ -295,37 +298,39 @@ document.addEventListener('DOMContentLoaded', () => {
         slideHTML += '</div>';
         instagramContent.innerHTML = slideHTML;
 
-        igProgress.style.width = Math.min(100, Math.round((text.length / INSTAGRAM_SOFT_LIMIT) * 100)) + '%';
+        if (igProgress) igProgress.style.width = Math.min(100, Math.round((text.length / INSTAGRAM_SOFT_LIMIT) * 100)) + '%';
     };
 
     // INPUT handling
-    mainInput.addEventListener('input', debounce(() => updateAll(mainInput.value), 200));
-
-    const existing = loadInput();
-    if (existing) {
-        mainInput.value = existing;
-        updateAll(existing);
-    } else {
-        updateAll('');
+    if (mainInput) {
+        mainInput.addEventListener('input', debounce(() => updateAll(mainInput.value), 200));
+        const existing = loadInput();
+        if (existing) {
+            mainInput.value = existing;
+            updateAll(existing);
+        } else {
+            updateAll('');
+        }
     }
 
-    // COPY actions
+    // COPY actions (event delegation)
     document.body.addEventListener('click', (e) => {
         if (e.target.matches('.tweet-copy-button')) {
             const idx = e.target.getAttribute('data-tweet-index');
             const el = document.getElementById(`tweet-text-${idx}`);
             if (el) copyToClipboard(el.textContent, e.target);
         }
-        if (e.target === copyLinkedInBtn) {
+        if (copyLinkedInBtn && e.target === copyLinkedInBtn) {
             copyToClipboard(linkedinContent.textContent, e.target);
         }
-        if (e.target === copyInstagramBtn) {
+        if (copyInstagramBtn && e.target === copyInstagramBtn) {
             const txt = Array.from(instagramContent.querySelectorAll('.insta-slide .insta-title, .insta-slide .insta-body'))
                 .map(el => el.textContent.trim())
                 .join('\n');
             copyToClipboard(txt, e.target);
         }
         if (e.target.matches('.emoji-chip')) {
+            if (!mainInput) return;
             const emoji = e.target.getAttribute('data-emoji');
             const newVal = insertAtCursor(mainInput, emoji);
             updateAll(newVal);
@@ -353,35 +358,39 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX=0, startY=0, touching=false;
     const panelsContainer = document.querySelector('.output-section');
     const order = ['twitter','linkedin','instagram'];
-    const activeIndex = () => order.findIndex(k => document.getElementById(`${k}-output`).classList.contains('active'));
+    const activeIndex = () => order.findIndex(k => document.getElementById(`${k}-output`)?.classList.contains('active'));
 
-    panelsContainer.addEventListener('touchstart', (e) => {
-        if (!e.touches || e.touches.length !== 1) return;
-        touching = true;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-    }, { passive: true });
+    if (panelsContainer) {
+        panelsContainer.addEventListener('touchstart', (e) => {
+            if (!e.touches || e.touches.length !== 1) return;
+            touching = true;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        }, { passive: true });
 
-    panelsContainer.addEventListener('touchend', (e) => {
-        if (!touching) return;
-        touching = false;
-        const endX = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientX : startX;
-        const endY = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientY : startY;
-        const dx = endX - startX;
-        const dy = endY - startY;
-        if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
-        let idx = activeIndex();
-        if (dx < 0 && idx < order.length - 1) idx++;
-        else if (dx > 0 && idx > 0) idx--;
-        setActiveTab(order[idx]);
-    }, { passive: true });
+        panelsContainer.addEventListener('touchend', (e) => {
+            if (!touching) return;
+            touching = false;
+            const endX = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientX : startX;
+            const endY = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientY : startY;
+            const dx = endX - startX;
+            const dy = endY - startY;
+            if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+            let idx = activeIndex();
+            if (dx < 0 && idx < order.length - 1) idx++;
+            else if (dx > 0 && idx > 0) idx--;
+            setActiveTab(order[idx]);
+        }, { passive: true });
+    }
 
-    // Theme toggle
+    // Theme toggle (shared across pages)
     const setTheme = (mode) => {
         document.documentElement.setAttribute('data-theme', mode);
         try { localStorage.setItem(LS_KEY_THEME, mode); } catch {}
-        themeToggle.setAttribute('aria-pressed', String(mode === 'dark'));
-        themeToggle.textContent = mode === 'dark' ? '☀️' : '🌙';
+        if (themeToggle) {
+            themeToggle.setAttribute('aria-pressed', String(mode === 'dark'));
+            themeToggle.textContent = mode === 'dark' ? '☀️' : '🌙';
+        }
         const meta = document.querySelector('meta[name="theme-color"]');
         if (meta) meta.setAttribute('content', mode === 'dark' ? '#0f1115' : '#ffffff');
     };
@@ -390,8 +399,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     })();
     setTheme(initialTheme);
-    themeToggle.addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme') || 'light';
-        setTheme(current === 'light' ? 'dark' : 'light');
-    });
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme') || 'light';
+            setTheme(current === 'light' ? 'dark' : 'light');
+        });
+    }
+
+    // Year in footer (if present)
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
 });

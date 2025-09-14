@@ -7,15 +7,25 @@
     <title>Universal Content Repurposer</title>
     <link rel="stylesheet" href="style.css">
 
-    <!-- Google AdSense Auto Ads: replace ca-pub-XXXXXXXXXXXXXXXX with YOUR publisher ID -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7179154805169763"
-        crossorigin="anonymous">
-    </script>
+    <!-- Google AdSense Auto Ads (keep your publisher ID) -->
+    <script async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7179154805169763"
+        crossorigin="anonymous"></script>
 </head>
 <body>
-    <noscript>
-        <div class="noscript">This tool needs JavaScript enabled.</div>
-    </noscript>
+    <noscript><div class="noscript">This tool needs JavaScript enabled.</div></noscript>
+
+    <header class="topbar">
+        <nav class="nav">
+            <a class="nav__brand" href="index.html">UCR 🚀</a>
+            <div class="nav__links">
+                <a class="nav__link nav__link--active" href="index.html">Home</a>
+                <a class="nav__link" href="about.html">About</a>
+                <a class="nav__link" href="privacy.html">Privacy</a>
+            </div>
+            <button id="theme-toggle" class="btn btn-ghost" aria-pressed="false" aria-label="Toggle dark mode">🌙</button>
+        </nav>
+    </header>
 
     <div class="page">
         <main class="container">
@@ -24,10 +34,8 @@
                     <h1>Universal Content Repurposer 🚀</h1>
                     <p>Paste once. Get platform-perfect posts instantly.</p>
                 </div>
-
                 <div class="header-actions">
                     <div class="tone-badge" id="tone-badge" title="Detected tone">Tone: —</div>
-                    <button id="theme-toggle" class="btn btn-ghost" aria-pressed="false" aria-label="Toggle dark mode">🌙</button>
                 </div>
             </header>
 
@@ -86,7 +94,7 @@
                                 <span>~3000</span>
                                 <div class="progress"><div id="li-progress" class="progress__bar"></div></div>
                             </div>
-                            <button class="btn" id="copy-linkedin" data-copy-target="linkedin-content">Copy LinkedIn Post</button>
+                            <button class="btn" id="copy-linkedin">Copy LinkedIn Post</button>
                         </div>
                         <div id="linkedin-content" class="output-content"></div>
                     </div>
@@ -109,7 +117,16 @@
         </main>
     </div>
 
-    <footer><a href="private.html">Privacy Policy</a></footer>
+    <footer class="site-footer">
+        <div class="footer__links">
+            <a href="index.html">Home</a>
+            <span>•</span>
+            <a href="about.html">About</a>
+            <span>•</span>
+            <a href="privacy.html">Privacy Policy</a>
+        </div>
+        <div class="footer__copy">&copy; <span id="year"></span> Universal Content Repurposer.</div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
