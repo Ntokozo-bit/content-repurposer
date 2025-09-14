@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff">
+    <title>Universal Content Repurposer</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google AdSense Auto Ads: replace ca-pub-XXXXXXXXXXXXXXXX with YOUR publisher ID -->
+    <script async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+        data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+        crossorigin="anonymous"></script>
+</head>
+<body>
+    <noscript>
+        <div class="noscript">This tool needs JavaScript enabled.</div>
+    </noscript>
+
+    <div class="page">
+        <main class="container">
+            <header class="site-header">
+                <div class="brand">
+                    <h1>Universal Content Repurposer 🚀</h1>
+                    <p>Paste once. Get platform-perfect posts instantly.</p>
+                </div>
+
+                <div class="header-actions">
+                    <div class="tone-badge" id="tone-badge" title="Detected tone">Tone: —</div>
+                    <button id="theme-toggle" class="btn btn-ghost" aria-pressed="false" aria-label="Toggle dark mode">🌙</button>
+                </div>
+            </header>
+
+            <div class="main-grid">
+                <!-- INPUT -->
+                <section class="input-section card" aria-labelledby="your-content">
+                    <div class="card-header">
+                        <h2 id="your-content">Your Content</h2>
+                    </div>
+                    <div class="card-content">
+                        <textarea id="main-input" placeholder="Paste or write your content here. Use blank lines to separate topics. First line = title; next lines = body. One line = body-only."></textarea>
+
+                        <div class="input-toolbar">
+                            <div class="stats">
+                                <div class="stat"><span id="char-count" class="stat-value">0</span><span class="stat-label">Characters</span></div>
+                                <div class="stat"><span id="word-count" class="stat-value">0</span><span class="stat-label">Words</span></div>
+                                <div class="stat"><span id="read-time" class="stat-value">0</span><span class="stat-label">Min Read</span></div>
+                            </div>
+
+                            <div class="emoji-suggest">
+                                <span class="emoji-suggest__label">Emoji:</span>
+                                <div class="emoji-suggest__list" id="emoji-suggest"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- OUTPUT -->
+                <section class="output-section card" aria-label="Outputs">
+                    <div class="tabs sticky-tabs" role="tablist">
+                        <button class="tab active" data-tab="twitter" role="tab" aria-selected="true" aria-controls="twitter-output">Twitter/X</button>
+                        <button class="tab" data-tab="linkedin" role="tab" aria-selected="false" aria-controls="linkedin-output">LinkedIn</button>
+                        <button class="tab" data-tab="instagram" role="tab" aria-selected="false" aria-controls="instagram-output">Instagram</button>
+                    </div>
+
+                    <div class="swipe-hint">Tip: swipe left/right to switch platforms</div>
+
+                    <!-- Twitter -->
+                    <div id="twitter-output" class="output-panel active" role="tabpanel" aria-labelledby="twitter">
+                        <div class="panel-tools">
+                            <div class="limit">
+                                <span>280</span>
+                                <div class="progress"><div id="tw-progress" class="progress__bar"></div></div>
+                            </div>
+                            <button class="btn" id="copy-thread">Copy Full Thread</button>
+                        </div>
+                        <div id="twitter-content" class="output-content">
+                            <p class="muted">Your generated thread will appear here...</p>
+                        </div>
+                    </div>
+
+                    <!-- LinkedIn -->
+                    <div id="linkedin-output" class="output-panel" role="tabpanel" aria-labelledby="linkedin">
+                        <div class="panel-tools">
+                            <div class="limit">
+                                <span>~3000</span>
+                                <div class="progress"><div id="li-progress" class="progress__bar"></div></div>
+                            </div>
+                            <button class="btn" id="copy-linkedin" data-copy-target="linkedin-content">Copy LinkedIn Post</button>
+                        </div>
+                        <div id="linkedin-content" class="output-content"></div>
+                    </div>
+
+                    <!-- Instagram -->
+                    <div id="instagram-output" class="output-panel" role="tabpanel" aria-labelledby="instagram">
+                        <div class="panel-tools">
+                            <div class="limit">
+                                <span>~2200</span>
+                                <div class="progress"><div id="ig-progress" class="progress__bar"></div></div>
+                            </div>
+                            <button class="btn" id="copy-instagram">Copy All Slide Text</button>
+                        </div>
+                        <div id="instagram-content" class="output-content">
+                            <p class="muted">Your generated slides will appear here...</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
