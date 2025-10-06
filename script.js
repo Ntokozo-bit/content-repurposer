@@ -1,3 +1,4 @@
+/* script.js */
 document.addEventListener('DOMContentLoaded', () => {
     // --- DOM ---
     const mainInput = document.getElementById('main-input');
@@ -113,7 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const renderEmojiChips = (emojis) => {
-        emojiList.innerHTML = emojis.map(e => `<button class="emoji-chip" data-emoji="${e}" aria-label="Insert emoji ${e}">${e}</button>`).join('');
+        const list = document.getElementById('emoji-suggest');
+        if (!list) return;
+        list.innerHTML = emojis.map(e => `<button class="emoji-chip" data-emoji="${e}" aria-label="Insert emoji ${e}">${e}</button>`).join('');
     };
 
     const insertAtCursor = (textarea, text) => {
@@ -138,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const updateStats = (text) => {
+        if (!charCountEl || !wordCountEl || !readTimeEl) return;
         const charCount = text.length;
         const words = text.trim().split(/\s+/).filter(w => w.length > 0);
         const wordCount = words.length;
@@ -148,8 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const updateToneAndEmoji = (text) => {
-        const tone = detectTone(text);
-        toneBadge.textContent = `Tone: ${tone}`;
+        if (toneBadge) toneBadge.textContent = `Tone: ${detectTone(text)}`;
         renderEmojiChips(suggestEmojis(text));
     };
 
@@ -175,9 +178,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const sectionText = body ? body : '';
 
             let sentences = [];
-            if (header && sectionText) sentences = [header].concat(splitIntoSentences(sectionText));
+            if (header && sectionText) sentences = [header].concat(text.replace(/\s+/g, ' ').trim().split(/(?<=[.!?])\s+/).filter(Boolean));
             else if (header && !sectionText) sentences = [header];
-            else sentences = splitIntoSentences(sectionText);
+            else sentences = text.replace(/\s+/g, ' ').trim().split(/(?<=[.!?])\s+/).filter(Boolean);
 
             let current = '';
             const reserve = 10;
@@ -227,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (twProgress) twProgress.style.width = Math.min(100, Math.round((last.length / TWITTER_CHAR_LIMIT) * 100)) + '%';
     };
 
-    // LINKEDIN (one blank line above and below each title)
+    // LINKEDIN
     const formatForLinkedIn = (text) => {
         if (!linkedinContent) return;
         if (text.trim() === '') {
@@ -245,17 +248,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const outLines = [];
 
         blocks.forEach((block) => {
-            const { title, body } = parseBlockTitleBody(block);
-            if (title) {
-                outLines.push('');
-                outLines.push(title);
-                outLines.push('');
-                if (body) outLines.push(body);
-                outLines.push('');
-            } else {
+            const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+            if (!lines.length) return;
+            if (lines.length === 1) {
                 outLines.push(block);
                 outLines.push('');
+                return;
             }
+            outLines.push('');
+            outLines.push(lines[0]);
+            outLines.push('');
+            outLines.push(lines.slice(1).join(' '));
+            outLines.push('');
         });
 
         let finalText = outLines.join('\n');
@@ -265,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (liProgress) liProgress.style.width = Math.min(100, Math.round((finalText.length / LINKEDIN_SOFT_LIMIT) * 100)) + '%';
     };
 
-    // INSTAGRAM (title optional)
+    // INSTAGRAM
     const formatForInstagram = (text) => {
         if (!instagramContent) return;
         if (text.trim() === '') {
@@ -273,25 +277,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if (igProgress) igProgress.style.width = '0%';
             return;
         }
-        const blocks = splitIntoSections(text);
-        if (!blocks.length) {
+        const sections = splitIntoSections(text);
+        if (!sections.length) {
             instagramContent.innerHTML = '<p class="muted">Your generated slides will appear here...</p>';
             if (igProgress) igProgress.style.width = '0%';
             return;
         }
 
         let slideHTML = '<div class="insta-slides-container">';
-        blocks.forEach((block, index) => {
-            const { title, body } = parseBlockTitleBody(block);
-            const hasTitle = !!title;
-            const safeTitle = hasTitle ? escapeHTML(title) : '';
-            const safeBody = escapeHTML(hasTitle ? (body || '') : block);
+        sections.forEach((block, index) => {
+            const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+            const hasTitle = lines.length > 1;
+            const title = hasTitle ? lines[0] : '';
+            const body = hasTitle ? lines.slice(1).join(' ') : block;
 
             slideHTML += `
                 <div class="insta-slide">
-                    <span class="slide-number">${index + 1}/${blocks.length}</span>
-                    ${hasTitle ? `<div class="insta-title">${safeTitle}</div>` : ''}
-                    <div class="insta-body">${safeBody}</div>
+                    <span class="slide-number">${index + 1}/${sections.length}</span>
+                    ${hasTitle ? `<div class="insta-title">${escapeHTML(title)}</div>` : ''}
+                    <div class="insta-body">${escapeHTML(body)}</div>
                 </div>
             `;
         });
@@ -304,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // INPUT handling
     if (mainInput) {
         mainInput.addEventListener('input', debounce(() => updateAll(mainInput.value), 200));
-        const existing = loadInput();
+        const existing = (() => { try { return localStorage.getItem('ucr_input') || ''; } catch { return ''; } })();
         if (existing) {
             mainInput.value = existing;
             updateAll(existing);
@@ -320,10 +324,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const el = document.getElementById(`tweet-text-${idx}`);
             if (el) copyToClipboard(el.textContent, e.target);
         }
-        if (copyLinkedInBtn && e.target === copyLinkedInBtn) {
-            copyToClipboard(linkedinContent.textContent, e.target);
+        if (e.target.id === 'copy-linkedin') {
+            if (linkedinContent) copyToClipboard(linkedinContent.textContent, e.target);
         }
-        if (copyInstagramBtn && e.target === copyInstagramBtn) {
+        if (e.target.id === 'copy-instagram') {
+            if (!instagramContent) return;
             const txt = Array.from(instagramContent.querySelectorAll('.insta-slide .insta-title, .insta-slide .insta-body'))
                 .map(el => el.textContent.trim())
                 .join('\n');
@@ -349,11 +354,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Tabs & swipe
-    tabs.forEach(tab => tab.addEventListener('click', () => setActiveTab(tab.dataset.tab)));
+    const tabsEls = document.querySelectorAll('.tab');
     const setActiveTab = (name) => {
-        tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
-        outputPanels.forEach(p => p.classList.toggle('active', p.id === `${name}-output`));
+        tabsEls.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+        document.querySelectorAll('.output-panel').forEach(p => p.classList.toggle('active', p.id === `${name}-output`));
     };
+    tabsEls.forEach(tab => tab.addEventListener('click', () => setActiveTab(tab.dataset.tab)));
 
     let startX=0, startY=0, touching=false;
     const panelsContainer = document.querySelector('.output-section');
@@ -383,10 +389,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { passive: true });
     }
 
-    // Theme toggle (shared across pages)
+    // Theme toggle + Year (shared)
     const setTheme = (mode) => {
         document.documentElement.setAttribute('data-theme', mode);
-        try { localStorage.setItem(LS_KEY_THEME, mode); } catch {}
+        try { localStorage.setItem('ucr_theme', mode); } catch {}
         if (themeToggle) {
             themeToggle.setAttribute('aria-pressed', String(mode === 'dark'));
             themeToggle.textContent = mode === 'dark' ? '☀️' : '🌙';
@@ -395,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (meta) meta.setAttribute('content', mode === 'dark' ? '#0f1115' : '#ffffff');
     };
     const initialTheme = (() => {
-        try { const s = localStorage.getItem(LS_KEY_THEME); if (s) return s; } catch {}
+        try { const s = localStorage.getItem('ucr_theme'); if (s) return s; } catch {}
         return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     })();
     setTheme(initialTheme);
@@ -406,7 +412,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Year in footer (if present)
     const yearEl = document.getElementById('year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 });
