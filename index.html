@@ -4,34 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#ffffff">
-    <title>Universal Content Repurposer</title>
+    <title>RepurposerHub – Turn one draft into platform-perfect posts</title>
+    <meta name="description" content="RepurposerHub helps creators repurpose one draft into Twitter, LinkedIn, and Instagram posts in seconds. Simple, fast, and free.">
+    <link rel="canonical" href="https://repurposerhub.example/">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
 
-    <!-- Google AdSense Auto Ads (keep your publisher ID) -->
-    <script async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7179154805169763"
-        crossorigin="anonymous">
-    </script>
-    
-    <script async custom-element="amp-auto-ads"
-        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+    <!-- Basic SEO / Social -->
+    <meta property="og:title" content="RepurposerHub">
+    <meta property="og:description" content="Paste once. Get platform-perfect posts instantly.">
+    <meta property="og:url" content="https://repurposerhub.example/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://repurposerhub.example/og-cover.png">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context":"https://schema.org",
+        "@type":"WebSite",
+        "name":"RepurposerHub",
+        "url":"https://repurposerhub.example/",
+        "potentialAction":{
+            "@type":"SearchAction",
+            "target":"https://repurposerhub.example/?q={search_term_string}",
+            "query-input":"required name=search_term_string"
+        }
+    }
     </script>
 
+    <!-- Content Security Policy (allows GA + AdSense on static hosting) -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        img-src 'self' data: https:;
+        style-src 'self' 'unsafe-inline';
+        font-src 'self' data:;
+        connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://stats.g.doubleclick.net;
+        script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://securepubads.g.doubleclick.net;
+        frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com;
+    ">
 </head>
 <body>
-    <amp-auto-ads type="adsense"
-        data-ad-client="ca-pub-7179154805169763">
-    </amp-auto-ads>
-    
     <noscript><div class="noscript">This tool needs JavaScript enabled.</div></noscript>
 
     <header class="topbar">
         <nav class="nav">
-            <a class="nav__brand" href="index.html">UCR 🚀</a>
+            <a class="nav__brand" href="index.html">RepurposerHub 🚀</a>
             <div class="nav__links">
                 <a class="nav__link nav__link--active" href="index.html">Home</a>
                 <a class="nav__link" href="about.html">About</a>
                 <a class="nav__link" href="privacy.html">Privacy</a>
+                <a class="nav__link" href="terms.html">Terms</a>
+                <a class="nav__link" href="disclaimer.html">Disclaimer</a>
             </div>
             <button id="theme-toggle" class="btn btn-ghost" aria-pressed="false" aria-label="Toggle dark mode">🌙</button>
         </nav>
@@ -41,7 +65,7 @@
         <main class="container">
             <header class="site-header">
                 <div class="brand">
-                    <h1>Universal Content Repurposer 🚀</h1>
+                    <h1>RepurposerHub</h1>
                     <p>Paste once. Get platform-perfect posts instantly.</p>
                 </div>
                 <div class="header-actions">
@@ -124,6 +148,33 @@
                     </div>
                 </section>
             </div>
+
+            <!-- How it works / Instructions (helps reviewers + SEO) -->
+            <section class="card">
+                <div class="card-header"><h2>How RepurposerHub Works (simple)</h2></div>
+                <div class="card-content">
+                    <ol>
+                        <li>Paste your draft in the big box.</li>
+                        <li>We split it nicely for Twitter, LinkedIn, and Instagram.</li>
+                        <li>Tap “Copy” on each platform to paste on your socials.</li>
+                        <li>Follow the tips in each tab to stay within limits.</li>
+                    </ol>
+                    <p class="muted">Tip: put a title on the first line, then your text below it.</p>
+                </div>
+            </section>
+
+            <!-- FAQ (adds helpful content) -->
+            <section class="card">
+                <div class="card-header"><h2>FAQ</h2></div>
+                <div class="card-content">
+                    <h3>Is my text saved?</h3>
+                    <p>No. Everything happens in your browser. We don’t store your text.</p>
+                    <h3>Is RepurposerHub free?</h3>
+                    <p>Yes. We support the site with ads.</p>
+                    <h3>Who can use it?</h3>
+                    <p>Creators, marketers, and anyone posting across multiple platforms.</p>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -134,11 +185,16 @@
             <a href="about.html">About</a>
             <span>•</span>
             <a href="privacy.html">Privacy Policy</a>
+            <span>•</span>
+            <a href="terms.html">Terms</a>
+            <span>•</span>
+            <a href="disclaimer.html">Disclaimer</a>
         </div>
-        <div class="footer__copy">&copy; <span id="year"></span> Universal Content Repurposer.</div>
+        <div class="footer__copy">&copy; <span id="year"></span> RepurposerHub.</div>
     </footer>
 
+    <script src="config.js"></script>
+    <script src="analytics.js" defer></script>
     <script src="script.js"></script>
 </body>
-
 </html>
