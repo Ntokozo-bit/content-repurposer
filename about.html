@@ -3,22 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>About – Universal Content Repurposer</title>
+    <title>About – RepurposerHub</title>
+    <meta name="description" content="Learn about RepurposerHub, a simple tool for turning one draft into platform-perfect social posts.">
+    <link rel="canonical" href="https://repurposerhub.example/about.html">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
 
-    <!-- Auto Ads (same publisher ID as index) -->
-    <script async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7179154805169763"
-        crossorigin="anonymous"></script>
+    <meta property="og:title" content="About RepurposerHub">
+    <meta property="og:description" content="Our mission is to make repurposing content fast and stress-free.">
+    <meta property="og:url" content="https://repurposerhub.example/about.html">
 </head>
 <body>
     <header class="topbar">
         <nav class="nav">
-            <a class="nav__brand" href="index.html">UCR 🚀</a>
+            <a class="nav__brand" href="index.html">RepurposerHub 🚀</a>
             <div class="nav__links">
                 <a class="nav__link" href="index.html">Home</a>
                 <a class="nav__link nav__link--active" href="about.html">About</a>
                 <a class="nav__link" href="privacy.html">Privacy</a>
+                <a class="nav__link" href="terms.html">Terms</a>
+                <a class="nav__link" href="disclaimer.html">Disclaimer</a>
             </div>
             <button id="theme-toggle" class="btn btn-ghost" aria-pressed="false" aria-label="Toggle dark mode">🌙</button>
         </nav>
@@ -29,7 +33,7 @@
             <header class="site-header">
                 <div class="brand">
                     <h1>About Us</h1>
-                    <p>Get to know the story behind Universal Content Repurposer 🚀</p>
+                    <p>Get to know the story behind RepurposerHub 🚀</p>
                 </div>
             </header>
 
@@ -37,9 +41,9 @@
                 <div class="card-content">
                     <h2>Who We Are</h2>
                     <p>
-                        Universal Content Repurposer is a simple yet powerful tool built for
-                        <strong>content creators, influencers, and marketers</strong>. We believe your ideas should shine
-                        everywhere without the pain of reformatting.
+                        RepurposerHub is a simple tool for
+                        <strong>content creators, influencers, and marketers</strong>. Your ideas should shine everywhere
+                        without the pain of reformatting.
                     </p>
                 </div>
             </section>
@@ -56,19 +60,7 @@
 
             <section class="card">
                 <div class="card-content">
-                    <h2>Who This Is For</h2>
-                    <ul>
-                        <li>Creators growing on multiple platforms.</li>
-                        <li>Marketers who value consistency and speed.</li>
-                        <li>Anyone tired of rewriting the same post again and again.</li>
-                    </ul>
-                </div>
-            </section>
-
-            <section class="card">
-                <div class="card-content">
                     <h2>Contact</h2>
-                    <p>Questions or feedback? Reach out:</p>
                     <ul>
                         <li>Email: <a href="mailto:ntokozolms10@gmail.com">ntokozolms10@gmail.com</a></li>
                     </ul>
@@ -84,30 +76,16 @@
             <a href="about.html">About</a>
             <span>•</span>
             <a href="privacy.html">Privacy Policy</a>
+            <span>•</span>
+            <a href="terms.html">Terms</a>
+            <span>•</span>
+            <a href="disclaimer.html">Disclaimer</a>
         </div>
-        <div class="footer__copy">&copy; <span id="year"></span> Universal Content Repurposer.</div>
+        <div class="footer__copy">&copy; <span id="year"></span> RepurposerHub.</div>
     </footer>
 
-    <script>
-        // Year + theme (share behavior with main page)
-        document.getElementById('year').textContent = new Date().getFullYear();
-        const themeToggle = document.getElementById('theme-toggle');
-        const LS_KEY_THEME = 'ucr_theme';
-        const setTheme = (mode) => {
-            document.documentElement.setAttribute('data-theme', mode);
-            try { localStorage.setItem(LS_KEY_THEME, mode); } catch {}
-            themeToggle.setAttribute('aria-pressed', String(mode === 'dark'));
-            themeToggle.textContent = mode === 'dark' ? '☀️' : '🌙';
-        };
-        const initialTheme = (() => {
-            try { const s = localStorage.getItem(LS_KEY_THEME); if (s) return s; } catch {}
-            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        })();
-        setTheme(initialTheme);
-        themeToggle.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme') || 'light';
-            setTheme(current === 'light' ? 'dark' : 'light');
-        });
-    </script>
+    <script src="config.js"></script>
+    <script src="analytics.js" defer></script>
+    <script src="script.js"></script>
 </body>
 </html>
