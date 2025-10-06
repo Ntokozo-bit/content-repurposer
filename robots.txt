@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://repurposerhub.example/sitemap.xml
