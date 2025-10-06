@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Privacy Policy – Universal Content Repurposer</title>
+    <title>Privacy Policy – RepurposerHub</title>
+    <meta name="description" content="Privacy policy for RepurposerHub with details about cookies, Google AdSense, and data choices.">
+    <link rel="canonical" href="https://repurposerhub.example/privacy.html">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
-
-    <!-- Auto Ads (same publisher ID) -->
-    <script async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7179154805169763"
-        crossorigin="anonymous"></script>
 </head>
 <body>
     <header class="topbar">
         <nav class="nav">
-            <a class="nav__brand" href="index.html">UCR 🚀</a>
+            <a class="nav__brand" href="index.html">RepurposerHub 🚀</a>
             <div class="nav__links">
                 <a class="nav__link" href="index.html">Home</a>
                 <a class="nav__link" href="about.html">About</a>
                 <a class="nav__link nav__link--active" href="privacy.html">Privacy</a>
+                <a class="nav__link" href="terms.html">Terms</a>
+                <a class="nav__link" href="disclaimer.html">Disclaimer</a>
             </div>
             <button id="theme-toggle" class="btn btn-ghost" aria-pressed="false" aria-label="Toggle dark mode">🌙</button>
         </nav>
@@ -29,27 +29,44 @@
             <header class="site-header">
                 <div class="brand">
                     <h1>Privacy Policy</h1>
-                    <p>Last updated: September 14, 2025</p>
+                    <p>Last updated: October 4, 2025</p>
                 </div>
             </header>
 
             <section class="card">
                 <div class="card-content">
-                    <h2>Advertising</h2>
+                    <h2>What We Collect</h2>
                     <p>
-                        We use <strong>Google AdSense</strong> to display ads. Google may use cookies to serve ads based on your prior visits.
-                        You can opt out of personalized advertising at
-                        <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ad Settings</a>.
+                        We do <strong>not</strong> collect personal information beyond what your browser normally sends (e.g., IP address, User-Agent).
+                        Any text you type into RepurposerHub stays in your browser and is not sent to our servers.
                     </p>
                 </div>
             </section>
 
             <section class="card">
                 <div class="card-content">
-                    <h2>Information We Collect</h2>
+                    <h2>Cookies & Advertising</h2>
                     <p>
-                        We do <strong>not</strong> collect personal information beyond what your browser normally sends (e.g., IP address, User-Agent).
-                        Any text you type into this tool stays in your browser and is not sent to our servers.
+                        We use <strong>Google AdSense</strong> to display ads. Google and its partners may use cookies to serve ads based on past visits to this and other websites.
+                        These cookies enable Google to show personalized ads (also called interest-based ads).
+                    </p>
+                    <p>
+                        You can opt out of personalized advertising in your Google account settings:
+                        <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google Ads Settings</a>.
+                        You can also learn more at:
+                        <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google Advertising Policies</a>.
+                    </p>
+                    <p>
+                        Third-party vendors and ad networks may serve ads on this site. You may visit those vendors’ websites to opt out of cookies where available.
+                    </p>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card-content">
+                    <h2>Analytics</h2>
+                    <p>
+                        We use <strong>Google Analytics 4 (GA4)</strong> to understand how people use RepurposerHub. GA4 uses cookies or similar technologies to collect usage data. We enable IP anonymization.
                     </p>
                 </div>
             </section>
@@ -57,10 +74,10 @@
             <section class="card">
                 <div class="card-content">
                     <h2>Your Choices</h2>
-                    <p>
-                        You may disable cookies in your browser settings if you prefer not to allow advertising cookies.
-                        However, doing so may affect how ads are shown.
-                    </p>
+                    <ul>
+                        <li>You can disable cookies in your browser settings. Some features or ad preferences may be affected.</li>
+                        <li>Use the links above to opt out of personalized ads.</li>
+                    </ul>
                 </div>
             </section>
 
@@ -68,7 +85,7 @@
                 <div class="card-content">
                     <h2>Contact Us</h2>
                     <p>
-                        If you have questions about this Privacy Policy, contact us at:
+                        If you have questions about this policy, contact us at:
                         <a href="mailto:ntokozolms10@gmail.com">ntokozolms10@gmail.com</a>
                     </p>
                 </div>
@@ -83,31 +100,16 @@
             <a href="about.html">About</a>
             <span>•</span>
             <a href="privacy.html">Privacy Policy</a>
+            <span>•</span>
+            <a href="terms.html">Terms</a>
+            <span>•</span>
+            <a href="disclaimer.html">Disclaimer</a>
         </div>
-        <div class="footer__copy">&copy; <span id="year"></span> Universal Content Repurposer.</div>
+        <div class="footer__copy">&copy; <span id="year"></span> RepurposerHub.</div>
     </footer>
 
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-        const themeToggle = document.getElementById('theme-toggle');
-        const LS_KEY_THEME = 'ucr_theme';
-        const setTheme = (mode) => {
-            document.documentElement.setAttribute('data-theme', mode);
-            try { localStorage.setItem(LS_KEY_THEME, mode); } catch {}
-            themeToggle.setAttribute('aria-pressed', String(mode === 'dark'));
-            themeToggle.textContent = mode === 'dark' ? '☀️' : '🌙';
-        };
-        const initialTheme = (() => {
-            try { const s = localStorage.getItem(LS_KEY_THEME); if (s) return s; } catch {}
-            return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        })();
-        setTheme(initialTheme);
-        themeToggle.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme') || 'light';
-            setTheme(current === 'light' ? 'dark' : 'light');
-        });
-    </script>
+    <script src="config.js"></script>
+    <script src="analytics.js" defer></script>
+    <script src="script.js"></script>
 </body>
-
 </html>
-
