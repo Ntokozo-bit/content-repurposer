@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const twitterContent = document.getElementById('twitter-content');
     const linkedinContent = document.getElementById('linkedin-content');
     const instagramContent = document.getElementById('instagram-content');
+    const facebookContent = document.getElementById('facebook-content');
+    const whatsappContent = document.getElementById('whatsapp-content');
 
     const tabs = document.querySelectorAll('.tab');
     const outputPanels = document.querySelectorAll('.output-panel');
@@ -17,21 +19,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const twProgress = document.getElementById('tw-progress');
     const liProgress = document.getElementById('li-progress');
     const igProgress = document.getElementById('ig-progress');
+    const fbProgress = document.getElementById('fb-progress');
+    const waProgress = document.getElementById('wa-progress');
 
     const copyThreadBtn = document.getElementById('copy-thread');
     const copyLinkedInBtn = document.getElementById('copy-linkedin');
     const copyInstagramBtn = document.getElementById('copy-instagram');
+    const downloadInstagramBtn = document.getElementById('download-instagram');
 
     const emojiList = document.getElementById('emoji-suggest');
     const toneBadge = document.getElementById('tone-badge');
 
     const themeToggle = document.getElementById('theme-toggle');
+    const consentBanner = document.getElementById('consent-banner');
+    const consentAcceptBtn = document.getElementById('consent-accept');
+    const consentDeclineBtn = document.getElementById('consent-decline');
+    const manageConsentBtn = document.getElementById('manage-consent');
 
     // --- CONSTANTS ---
     const TWITTER_CHAR_LIMIT = 280;
     const LINKEDIN_SOFT_LIMIT = 3000;
     const INSTAGRAM_SOFT_LIMIT = 2200;
+    const FACEBOOK_SOFT_LIMIT = 1500;
+    const WHATSAPP_SOFT_LIMIT = 1200;
     const WORDS_PER_MINUTE = 200;
+    const INSTAGRAM_CANVAS_SIZE = 1080;
+    const SLIDE_THEMES = [
+        { background: '#11141b', text: '#f8f8f8', accent: '#ffb703', titleFont: '"Poppins", "Inter", sans-serif', bodyFont: '"Space Grotesk", "Inter", sans-serif' },
+        { background: '#f4f1de', text: '#2b2d42', accent: '#ef476f', titleFont: '"Playfair Display", Georgia, serif', bodyFont: '"Inter", "Helvetica Neue", sans-serif' },
+        { background: '#0d1321', text: '#d8e2dc', accent: '#64dfdf', titleFont: '"Space Grotesk", "Inter", sans-serif', bodyFont: '"Inter", "Helvetica Neue", sans-serif' },
+        { background: '#fff7ec', text: '#2a2a2a', accent: '#c71f37', titleFont: '"Poppins", "Inter", sans-serif', bodyFont: '"Space Grotesk", "Inter", sans-serif' }
+    ];
+    const LS_KEY_CONSENT = 'ucr_consent';
+    const CONSENT_ACCEPTED = 'accepted';
+    const CONSENT_DECLINED = 'declined';
 
     // --- UTIL ---
     const escapeHTML = (str) =>
@@ -58,6 +79,82 @@ document.addEventListener('DOMContentLoaded', () => {
     const splitIntoSentences = (text) =>
         text.replace(/\s+/g, ' ').trim().split(/(?<=[.!?])\s+/).filter(Boolean);
 
+    const smartTrim = (text, max = 180) => {
+        if (!text) return '';
+        if (text.length <= max) return text;
+        const slice = text.slice(0, max);
+        const lastSpace = slice.lastIndexOf(' ');
+        return (lastSpace > 60 ? slice.slice(0, lastSpace) : slice).trim() + '…';
+    };
+
+    const chunkParagraph = (text, limit = 260) => {
+        const normalized = text.replace(/\s+/g, ' ').trim();
+        if (!normalized) return [];
+        const sentences = splitIntoSentences(normalized);
+        const chunks = [];
+        let current = '';
+        const flush = () => {
+            if (current.trim()) {
+                chunks.push(current.trim());
+                current = '';
+            }
+        };
+        const appendSentence = (sentence) => {
+            const candidate = current ? `${current} ${sentence}` : sentence;
+            if (candidate.length <= limit) {
+                current = candidate;
+            } else {
+                flush();
+                if (sentence.length > limit) {
+                    let start = 0;
+                    while (start < sentence.length) {
+                        const part = sentence.slice(start, start + limit);
+                        chunks.push(part.trim());
+                        start += limit;
+                    }
+                } else {
+                    current = sentence;
+                }
+            }
+        };
+        if (sentences.length) {
+            sentences.forEach(appendSentence);
+        } else {
+            appendSentence(normalized);
+        }
+        flush();
+        return chunks.length ? chunks : [normalized];
+    };
+
+    const renderPlaceholder = (target, message, progressEl) => {
+        if (target) target.innerHTML = `<p class="muted">${message}</p>`;
+        if (progressEl) progressEl.style.width = '0%';
+    };
+
+    let currentInstagramSlides = [];
+    let consentState = null;
+    let adHydrationAttempts = 0;
+
+    function hydrateAdSlots() {
+        const slots = document.querySelectorAll('.ad-slot');
+        if (!slots.length) return;
+        if (!window.adsbygoogle || typeof window.adsbygoogle.push !== 'function') {
+            if (adHydrationAttempts++ < 12) {
+                setTimeout(hydrateAdSlots, 800);
+            }
+            return;
+        }
+        slots.forEach((slot) => {
+            if (slot.dataset.loaded === 'true') return;
+            slot.dataset.loaded = 'true';
+            window.adsbygoogle.push({});
+        });
+    }
+    function queueAdHydration() {
+        adHydrationAttempts = 0;
+        hydrateAdSlots();
+    }
+
     // Debounce
     let debounceTimer = null;
     const debounce = (fn, ms = 250) => (...args) => {
@@ -75,6 +172,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadInput = () => {
         try { return localStorage.getItem(LS_KEY_INPUT) || ''; } catch { return ''; }
     };
+
+    const showConsentBanner = () => {
+        if (consentBanner) consentBanner.classList.add('is-visible');
+    };
+    const hideConsentBanner = () => {
+        if (consentBanner) consentBanner.classList.remove('is-visible');
+    };
+    const emitConsentChange = () => {
+        window.__consentState = consentState || null;
+        if (!consentState) return;
+        window.dispatchEvent(new CustomEvent('consentchange', { detail: { status: consentState } }));
+        if (consentState === CONSENT_ACCEPTED) {
+            queueAdHydration();
+        }
+    };
+    const setConsentPreference = (state) => {
+        consentState = state;
+        try { localStorage.setItem(LS_KEY_CONSENT, state); } catch {}
+        hideConsentBanner();
+        emitConsentChange();
+    };
+    const initConsentPreference = () => {
+        let stored = null;
+        try { stored = localStorage.getItem(LS_KEY_CONSENT); } catch {}
+        if (stored) {
+            consentState = stored;
+            emitConsentChange();
+        } else {
+            showConsentBanner();
+        }
+    };
+    if (consentAcceptBtn) {
+        consentAcceptBtn.addEventListener('click', () => setConsentPreference(CONSENT_ACCEPTED));
+    }
+    if (consentDeclineBtn) {
+        consentDeclineBtn.addEventListener('click', () => setConsentPreference(CONSENT_DECLINED));
+    }
+    if (manageConsentBtn) {
+        manageConsentBtn.addEventListener('click', () => showConsentBanner());
+    }
+    initConsentPreference();
 
     // Tone & emoji
     const POSITIVE_WORDS = ['great','amazing','awesome','love','win','success','happy','excited','incredible','fantastic','productive','boost','improve','best','powerful','easy','smart'];
@@ -137,6 +275,8 @@ document.addEventListener('DOMContentLoaded', () => {
         formatForTwitter(text);
         formatForLinkedIn(text);
         formatForInstagram(text);
+        formatForFacebook(text);
+        formatForWhatsApp(text);
         saveInput(text);
     };
 
@@ -177,10 +317,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const header = title ? title : '';
             const sectionText = body ? body : '';
 
-            let sentences = [];
-            if (header && sectionText) sentences = [header].concat(text.replace(/\s+/g, ' ').trim().split(/(?<=[.!?])\s+/).filter(Boolean));
+            let sentences = splitIntoSentences(sectionText || block);
+            if (header && sectionText) sentences = [header, ...sentences];
             else if (header && !sectionText) sentences = [header];
-            else sentences = text.replace(/\s+/g, ' ').trim().split(/(?<=[.!?])\s+/).filter(Boolean);
 
             let current = '';
             const reserve = 10;
@@ -272,30 +411,51 @@ document.addEventListener('DOMContentLoaded', () => {
     // INSTAGRAM
     const formatForInstagram = (text) => {
         if (!instagramContent) return;
+        currentInstagramSlides = [];
         if (text.trim() === '') {
-            instagramContent.innerHTML = '<p class="muted">Your generated slides will appear here...</p>';
-            if (igProgress) igProgress.style.width = '0%';
+            renderPlaceholder(instagramContent, 'Your generated slides will appear here...', igProgress);
             return;
         }
         const sections = splitIntoSections(text);
         if (!sections.length) {
-            instagramContent.innerHTML = '<p class="muted">Your generated slides will appear here...</p>';
-            if (igProgress) igProgress.style.width = '0%';
+            renderPlaceholder(instagramContent, 'Your generated slides will appear here...', igProgress);
             return;
         }
 
-        let slideHTML = '<div class="insta-slides-container">';
-        sections.forEach((block, index) => {
+        const slides = [];
+        sections.forEach((block, sectionIndex) => {
             const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
             const hasTitle = lines.length > 1;
             const title = hasTitle ? lines[0] : '';
-            const body = hasTitle ? lines.slice(1).join(' ') : block;
+            const bodyText = (hasTitle ? lines.slice(1).join(' ') : block).replace(/\s{2,}/g, ' ').trim();
+            const chunks = chunkParagraph(bodyText || block).filter(Boolean);
+            if (!chunks.length) {
+                slides.push({
+                    title,
+                    body: '',
+                    theme: SLIDE_THEMES[sectionIndex % SLIDE_THEMES.length]
+                });
+                return;
+            }
+            chunks.forEach((chunk, chunkIndex) => {
+                const theme = SLIDE_THEMES[(sectionIndex + chunkIndex) % SLIDE_THEMES.length];
+                slides.push({
+                    title: chunkIndex === 0 ? title : '',
+                    body: chunk,
+                    theme
+                });
+            });
+        });
+        currentInstagramSlides = slides;
 
+        let slideHTML = '<div class="insta-slides-container">';
+        slides.forEach((slide, index) => {
+            const theme = slide.theme;
             slideHTML += `
-                <div class="insta-slide">
-                    <span class="slide-number">${index + 1}/${sections.length}</span>
-                    ${hasTitle ? `<div class="insta-title">${escapeHTML(title)}</div>` : ''}
-                    <div class="insta-body">${escapeHTML(body)}</div>
+                <div class="insta-slide" style="background:${theme.background};color:${theme.text};font-family:${theme.bodyFont};">
+                    <span class="slide-number" style="color:${theme.accent};">${index + 1}/${slides.length}</span>
+                    ${slide.title ? `<div class="insta-title" style="color:${theme.text};font-family:${theme.titleFont};">${escapeHTML(slide.title)}</div>` : ''}
+                    <div class="insta-body" style="color:${theme.text};">${escapeHTML(slide.body)}</div>
                 </div>
             `;
         });
@@ -303,6 +463,159 @@ document.addEventListener('DOMContentLoaded', () => {
         instagramContent.innerHTML = slideHTML;
 
         if (igProgress) igProgress.style.width = Math.min(100, Math.round((text.length / INSTAGRAM_SOFT_LIMIT) * 100)) + '%';
+    };
+
+    const formatForFacebook = (text) => {
+        if (!facebookContent) return;
+        if (text.trim() === '') {
+            renderPlaceholder(facebookContent, 'A Facebook-ready story will appear here...', fbProgress);
+            return;
+        }
+        const sections = splitIntoSections(text);
+        if (!sections.length) {
+            renderPlaceholder(facebookContent, 'A Facebook-ready story will appear here...', fbProgress);
+            return;
+        }
+        const paragraphs = sections.slice(0, 4).map((block) => {
+            const paragraph = block.replace(/\s+/g, ' ').trim();
+            return smartTrim(paragraph, 420);
+        }).filter(Boolean);
+        const cta = `Comment if you want a template or send a DM—let's build this together.`;
+        facebookContent.innerHTML = `
+            <article class="facebook-card">
+                ${paragraphs.map(p => `<p>${escapeHTML(p)}</p>`).join('')}
+                <footer>💬 ${escapeHTML(cta)}</footer>
+            </article>
+        `;
+        const totalLength = (paragraphs.join(' ') + cta).length;
+        if (fbProgress) fbProgress.style.width = Math.min(100, Math.round((totalLength / FACEBOOK_SOFT_LIMIT) * 100)) + '%';
+    };
+
+    const formatForWhatsApp = (text) => {
+        if (!whatsappContent) return;
+        if (text.trim() === '') {
+            renderPlaceholder(whatsappContent, 'Short-form WhatsApp copy appears here...', waProgress);
+            return;
+        }
+        const sections = splitIntoSections(text);
+        if (!sections.length) {
+            renderPlaceholder(whatsappContent, 'Short-form WhatsApp copy appears here...', waProgress);
+            return;
+        }
+        const paragraphs = sections.slice(0, 3).map((block) => {
+            return smartTrim(block.replace(/\s+/g, ' ').trim(), 220);
+        }).filter(Boolean);
+        const closer = 'Reply if you want the swipe file or share it with your crew.';
+        whatsappContent.innerHTML = `
+            <div class="wa-bubble">
+                ${paragraphs.map(p => `<p>${escapeHTML(p)}</p>`).join('')}
+                <p class="wa-footer">🔗 ${escapeHTML(closer)}</p>
+            </div>
+        `;
+        const waLength = (paragraphs.join(' ') + closer).length;
+        if (waProgress) waProgress.style.width = Math.min(100, Math.round((waLength / WHATSAPP_SOFT_LIMIT) * 100)) + '%';
+    };
+
+    const wrapCanvasText = (ctx, text, maxWidth) => {
+        if (!text) return [];
+        const words = text.split(/\s+/).filter(Boolean);
+        const lines = [];
+        let line = '';
+        words.forEach((word) => {
+            const candidate = line ? `${line} ${word}` : word;
+            if (ctx.measureText(candidate).width > maxWidth && line) {
+                lines.push(line);
+                line = word;
+            } else {
+                line = candidate;
+            }
+        });
+        if (line) lines.push(line);
+        return lines.length ? lines : (text ? [text] : []);
+    };
+
+    const drawLines = (ctx, lines, x, startY, lineHeight) => {
+        let y = startY;
+        lines.forEach((line) => {
+            ctx.fillText(line, x, y);
+            y += lineHeight;
+        });
+        return y;
+    };
+
+    const downloadSlidesAsImages = () => {
+        const proceed = () => {
+            currentInstagramSlides.forEach((slide, index) => {
+                const canvas = document.createElement('canvas');
+                canvas.width = INSTAGRAM_CANVAS_SIZE;
+                canvas.height = INSTAGRAM_CANVAS_SIZE;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = slide.theme.background;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                const center = canvas.width / 2;
+                const margin = 120;
+                const gapBetween = 36;
+                let titleFontSize = slide.title ? 80 : 0;
+                let bodyFontSize = 52;
+                const minTitleSize = 48;
+                const minBodySize = 34;
+                const maxContentHeight = canvas.height - 220;
+
+                const computeLayout = () => {
+                    const layout = {};
+                    layout.titleFont = `600 ${titleFontSize}px ${slide.theme.titleFont}`;
+                    layout.bodyFont = `400 ${bodyFontSize}px ${slide.theme.bodyFont}`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'top';
+                    const textWidth = canvas.width - margin * 2;
+                    ctx.font = layout.titleFont;
+                    layout.titleLines = slide.title ? wrapCanvasText(ctx, slide.title, textWidth) : [];
+                    layout.titleLineHeight = Math.round(titleFontSize * 1.15);
+                    ctx.font = layout.bodyFont;
+                    layout.bodyLines = slide.body ? wrapCanvasText(ctx, slide.body, textWidth) : [];
+                    layout.bodyLineHeight = Math.round(bodyFontSize * 1.3);
+                    const gap = (layout.titleLines.length && layout.bodyLines.length) ? gapBetween : 0;
+                    layout.totalHeight = (layout.titleLines.length * layout.titleLineHeight) + (layout.bodyLines.length * layout.bodyLineHeight) + gap;
+                    layout.textWidth = textWidth;
+                    return layout;
+                };
+
+                let layout = computeLayout();
+                while (layout.totalHeight > maxContentHeight && bodyFontSize > minBodySize) {
+                    bodyFontSize -= 4;
+                    if (titleFontSize) titleFontSize = Math.max(minTitleSize, titleFontSize - 4);
+                    layout = computeLayout();
+                }
+
+                let currentY = Math.max(margin, (canvas.height - layout.totalHeight) / 2);
+                ctx.fillStyle = slide.theme.text;
+                ctx.font = layout.titleFont;
+                layout.titleLines.forEach((line) => {
+                    ctx.fillText(line, center, currentY);
+                    currentY += layout.titleLineHeight;
+                });
+                if (layout.titleLines.length && layout.bodyLines.length) currentY += gapBetween;
+
+                ctx.font = layout.bodyFont;
+                layout.bodyLines.forEach((line) => {
+                    ctx.fillText(line, center, currentY);
+                    currentY += layout.bodyLineHeight;
+                });
+
+                ctx.textAlign = 'left';
+                ctx.fillStyle = slide.theme.accent || slide.theme.text;
+                ctx.font = `600 44px ${slide.theme.bodyFont}`;
+                ctx.fillText(`${index + 1}/${currentInstagramSlides.length}`, 48, 48);
+
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = `repurposerhub-slide-${index + 1}.png`;
+                link.click();
+            });
+        };
+        const fontReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+        fontReady.then(proceed).catch(proceed);
     };
 
     // INPUT handling
@@ -315,6 +628,16 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             updateAll('');
         }
+    }
+
+    if (downloadInstagramBtn) {
+        downloadInstagramBtn.addEventListener('click', () => {
+            if (!currentInstagramSlides.length) {
+                alert('Add some content above before downloading slides.');
+                return;
+            }
+            downloadSlidesAsImages();
+        });
     }
 
     // COPY actions (event delegation)
@@ -333,6 +656,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 .map(el => el.textContent.trim())
                 .join('\n');
             copyToClipboard(txt, e.target);
+        }
+        if (e.target.id === 'copy-facebook') {
+            if (facebookContent) copyToClipboard(facebookContent.textContent, e.target);
+        }
+        if (e.target.id === 'copy-whatsapp') {
+            if (whatsappContent) copyToClipboard(whatsappContent.textContent, e.target);
         }
         if (e.target.matches('.emoji-chip')) {
             if (!mainInput) return;
@@ -363,7 +692,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let startX=0, startY=0, touching=false;
     const panelsContainer = document.querySelector('.output-section');
-    const order = ['twitter','linkedin','instagram'];
+    const order = ['twitter','linkedin','instagram','facebook','whatsapp'];
     const activeIndex = () => order.findIndex(k => document.getElementById(`${k}-output`)?.classList.contains('active'));
 
     if (panelsContainer) {
