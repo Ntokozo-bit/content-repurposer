@@ -35,7 +35,7 @@
         img-src 'self' data: https:;
         style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
         font-src 'self' data: https://fonts.gstatic.com;
-        connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://stats.g.doubleclick.net https://googleads.g.doubleclick.net https://adservice.google.com https://fundingchoicesmessages.google.com;
+        connect-src 'self' https://emojihub.yurace.pro https://www.google-analytics.com https://region1.google-analytics.com https://stats.g.doubleclick.net https://googleads.g.doubleclick.net https://adservice.google.com https://fundingchoicesmessages.google.com;
         script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://securepubads.g.doubleclick.net https://adservice.google.com;
         frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://adservice.google.com https://fundingchoicesmessages.google.com;
     ">
@@ -83,8 +83,12 @@
             <div class="main-grid">
                 <!-- INPUT -->
                 <section class="input-section card" aria-labelledby="your-content">
-                    <div class="card-header">
+                    <div class="card-header card-header--split">
                         <h2 id="your-content">Your Content</h2>
+                        <div class="card-actions" aria-label="Input actions">
+                            <button class="btn btn-small btn-outline" id="load-sample" type="button">Sample</button>
+                            <button class="btn btn-small btn-ghost" id="clear-input" type="button">Clear</button>
+                        </div>
                     </div>
                     <div class="card-content">
                         <textarea id="main-input" placeholder="Paste or write your content here. Use blank lines to separate topics. First line = title; next lines = body. One line = body-only."></textarea>
@@ -97,7 +101,10 @@
                             </div>
 
                             <div class="emoji-suggest">
-                                <span class="emoji-suggest__label">Emoji:</span>
+                                <div class="emoji-suggest__heading">
+                                    <span class="emoji-suggest__label">Emoji:</span>
+                                    <button class="emoji-refresh" id="emoji-refresh" type="button">More</button>
+                                </div>
                                 <div class="emoji-suggest__list" id="emoji-suggest"></div>
                             </div>
                         </div>
@@ -107,17 +114,17 @@
                 <!-- OUTPUT -->
                 <section class="output-section card" aria-label="Outputs">
                     <div class="tabs sticky-tabs" role="tablist" aria-label="Platform outputs">
-                        <button class="tab active" data-tab="twitter" role="tab" aria-selected="true" aria-controls="twitter-output">Twitter/X</button>
-                        <button class="tab" data-tab="linkedin" role="tab" aria-selected="false" aria-controls="linkedin-output">LinkedIn</button>
-                        <button class="tab" data-tab="instagram" role="tab" aria-selected="false" aria-controls="instagram-output">Instagram</button>
-                        <button class="tab" data-tab="facebook" role="tab" aria-selected="false" aria-controls="facebook-output">Facebook</button>
-                        <button class="tab" data-tab="whatsapp" role="tab" aria-selected="false" aria-controls="whatsapp-output">WhatsApp</button>
+                        <button class="tab active" id="twitter-tab" data-tab="twitter" role="tab" aria-selected="true" aria-controls="twitter-output">Twitter/X</button>
+                        <button class="tab" id="linkedin-tab" data-tab="linkedin" role="tab" aria-selected="false" aria-controls="linkedin-output" tabindex="-1">LinkedIn</button>
+                        <button class="tab" id="instagram-tab" data-tab="instagram" role="tab" aria-selected="false" aria-controls="instagram-output" tabindex="-1">Instagram</button>
+                        <button class="tab" id="facebook-tab" data-tab="facebook" role="tab" aria-selected="false" aria-controls="facebook-output" tabindex="-1">Facebook</button>
+                        <button class="tab" id="whatsapp-tab" data-tab="whatsapp" role="tab" aria-selected="false" aria-controls="whatsapp-output" tabindex="-1">WhatsApp</button>
                     </div>
 
                     <div class="swipe-hint">Tip: swipe or drag the tabs to switch platforms</div>
 
                     <!-- Twitter -->
-                    <div id="twitter-output" class="output-panel active" role="tabpanel" aria-labelledby="twitter">
+                    <div id="twitter-output" class="output-panel active" role="tabpanel" aria-labelledby="twitter-tab">
                         <div class="panel-tools">
                             <div class="limit">
                                 <span>280</span>
@@ -131,7 +138,7 @@
                     </div>
 
                     <!-- LinkedIn -->
-                    <div id="linkedin-output" class="output-panel" role="tabpanel" aria-labelledby="linkedin">
+                    <div id="linkedin-output" class="output-panel" role="tabpanel" aria-labelledby="linkedin-tab">
                         <div class="panel-tools">
                             <div class="limit">
                                 <span>~3000</span>
@@ -143,7 +150,7 @@
                     </div>
 
                     <!-- Instagram -->
-                    <div id="instagram-output" class="output-panel" role="tabpanel" aria-labelledby="instagram">
+                    <div id="instagram-output" class="output-panel" role="tabpanel" aria-labelledby="instagram-tab">
                         <div class="panel-tools">
                             <div class="limit">
                                 <span>~2200</span>
@@ -160,7 +167,7 @@
                     </div>
 
                     <!-- Facebook -->
-                    <div id="facebook-output" class="output-panel" role="tabpanel" aria-labelledby="facebook">
+                    <div id="facebook-output" class="output-panel" role="tabpanel" aria-labelledby="facebook-tab">
                         <div class="panel-tools">
                             <div class="limit">
                                 <span>~1500</span>
@@ -174,7 +181,7 @@
                     </div>
 
                     <!-- WhatsApp -->
-                    <div id="whatsapp-output" class="output-panel" role="tabpanel" aria-labelledby="whatsapp">
+                    <div id="whatsapp-output" class="output-panel" role="tabpanel" aria-labelledby="whatsapp-tab">
                         <div class="panel-tools">
                             <div class="limit">
                                 <span>~1200</span>

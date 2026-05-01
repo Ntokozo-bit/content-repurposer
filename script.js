@@ -22,12 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const fbProgress = document.getElementById('fb-progress');
     const waProgress = document.getElementById('wa-progress');
 
-    const copyThreadBtn = document.getElementById('copy-thread');
-    const copyLinkedInBtn = document.getElementById('copy-linkedin');
-    const copyInstagramBtn = document.getElementById('copy-instagram');
     const downloadInstagramBtn = document.getElementById('download-instagram');
+    const loadSampleBtn = document.getElementById('load-sample');
+    const clearInputBtn = document.getElementById('clear-input');
 
     const emojiList = document.getElementById('emoji-suggest');
+    const emojiRefreshBtn = document.getElementById('emoji-refresh');
     const toneBadge = document.getElementById('tone-badge');
 
     const themeToggle = document.getElementById('theme-toggle');
@@ -53,6 +53,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const LS_KEY_CONSENT = 'ucr_consent';
     const CONSENT_ACCEPTED = 'accepted';
     const CONSENT_DECLINED = 'declined';
+    const EMOJI_API_RANDOM = 'https://emojihub.yurace.pro/api/random';
+    const DEFAULT_EMOJIS = ['✨','💡','✅','🚀','📌','💬'];
+    const SAMPLE_DRAFT = `Launch smarter content this week
+Most creators do not need more platforms. They need one reliable system for turning the same idea into posts that fit each channel.
+
+Start with one useful insight, add a short story, and end with one clear action. Then reshape that draft for the platform instead of rewriting it from scratch.
+
+Repurposing works best when the message stays consistent but the format feels native.`;
 
     // --- UTIL ---
     const escapeHTML = (str) =>
@@ -156,10 +164,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Debounce
-    let debounceTimer = null;
-    const debounce = (fn, ms = 250) => (...args) => {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => fn(...args), ms);
+    const debounce = (fn, ms = 250) => {
+        let timer = null;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn(...args), ms);
+        };
     };
 
     // Local storage
@@ -169,10 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveInput = debounce((v) => {
         try { localStorage.setItem(LS_KEY_INPUT, v); } catch {}
     }, 300);
-    const loadInput = () => {
-        try { return localStorage.getItem(LS_KEY_INPUT) || ''; } catch { return ''; }
-    };
-
     const showConsentBanner = () => {
         if (consentBanner) consentBanner.classList.add('is-visible');
     };
@@ -240,6 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const suggestEmojis = (text) => {
+        if (!text.trim()) return DEFAULT_EMOJIS;
         const lower = text.toLowerCase();
         const set = new Set();
         for (const bucket of EMOJI_MAP) {
@@ -248,13 +255,63 @@ document.addEventListener('DOMContentLoaded', () => {
         const tone = detectTone(text);
         if (tone.includes('Positive')) ['✨','💪','😊'].forEach(e => set.add(e));
         if (tone.includes('Negative')) ['😕','🛠️','🔧'].forEach(e => set.add(e));
-        return Array.from(set).slice(0, 12);
+        const suggestions = Array.from(set);
+        return (suggestions.length ? suggestions : DEFAULT_EMOJIS).slice(0, 12);
     };
 
     const renderEmojiChips = (emojis) => {
-        const list = document.getElementById('emoji-suggest');
-        if (!list) return;
-        list.innerHTML = emojis.map(e => `<button class="emoji-chip" data-emoji="${e}" aria-label="Insert emoji ${e}">${e}</button>`).join('');
+        if (!emojiList) return;
+        const unique = Array.from(new Set(emojis.filter(Boolean))).slice(0, 12);
+        emojiList.innerHTML = unique.map(e => `<button class="emoji-chip" data-emoji="${e}" aria-label="Insert emoji ${e}">${e}</button>`).join('');
+    };
+
+    const decodeHtmlEntity = (value) => {
+        const textarea = document.createElement('textarea');
+        textarea.innerHTML = value;
+        return textarea.value;
+    };
+
+    const emojiFromApiPayload = (payload) => {
+        if (!payload) return '';
+        if (Array.isArray(payload.htmlCode) && payload.htmlCode[0]) {
+            return decodeHtmlEntity(payload.htmlCode[0]);
+        }
+        if (Array.isArray(payload.unicode) && payload.unicode[0]) {
+            const codePoints = payload.unicode
+                .map(code => parseInt(String(code).replace('U+', ''), 16))
+                .filter(Number.isFinite);
+            if (codePoints.length) return String.fromCodePoint(...codePoints);
+        }
+        return '';
+    };
+
+    const fetchRandomEmoji = async () => {
+        if (!emojiRefreshBtn || !emojiList) return;
+        const originalLabel = emojiRefreshBtn.textContent;
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2500);
+        emojiRefreshBtn.disabled = true;
+        emojiRefreshBtn.textContent = '...';
+        try {
+            const response = await fetch(EMOJI_API_RANDOM, { signal: controller.signal });
+            if (!response.ok) throw new Error('Emoji API unavailable');
+            const emoji = emojiFromApiPayload(await response.json());
+            if (!emoji) throw new Error('Emoji API returned no emoji');
+            const existing = Array.from(emojiList.querySelectorAll('.emoji-chip'))
+                .map(button => button.dataset.emoji)
+                .filter(Boolean);
+            renderEmojiChips([emoji, ...existing]);
+        } catch {
+            const fallback = DEFAULT_EMOJIS[Math.floor(Math.random() * DEFAULT_EMOJIS.length)];
+            const existing = Array.from(emojiList.querySelectorAll('.emoji-chip'))
+                .map(button => button.dataset.emoji)
+                .filter(Boolean);
+            renderEmojiChips([fallback, ...existing]);
+        } finally {
+            clearTimeout(timeoutId);
+            emojiRefreshBtn.disabled = false;
+            emojiRefreshBtn.textContent = originalLabel;
+        }
     };
 
     const insertAtCursor = (textarea, text) => {
@@ -534,15 +591,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return lines.length ? lines : (text ? [text] : []);
     };
 
-    const drawLines = (ctx, lines, x, startY, lineHeight) => {
-        let y = startY;
-        lines.forEach((line) => {
-            ctx.fillText(line, x, y);
-            y += lineHeight;
-        });
-        return y;
-    };
-
     const downloadSlidesAsImages = () => {
         const proceed = () => {
             currentInstagramSlides.forEach((slide, index) => {
@@ -618,6 +666,13 @@ document.addEventListener('DOMContentLoaded', () => {
         fontReady.then(proceed).catch(proceed);
     };
 
+    const setMainInputValue = (value) => {
+        if (!mainInput) return;
+        mainInput.value = value;
+        updateAll(value);
+        mainInput.focus();
+    };
+
     // INPUT handling
     if (mainInput) {
         mainInput.addEventListener('input', debounce(() => updateAll(mainInput.value), 200));
@@ -628,6 +683,21 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             updateAll('');
         }
+    }
+
+    if (loadSampleBtn) {
+        loadSampleBtn.addEventListener('click', () => setMainInputValue(SAMPLE_DRAFT));
+    }
+
+    if (clearInputBtn) {
+        clearInputBtn.addEventListener('click', () => {
+            setMainInputValue('');
+            try { localStorage.removeItem(LS_KEY_INPUT); } catch {}
+        });
+    }
+
+    if (emojiRefreshBtn) {
+        emojiRefreshBtn.addEventListener('click', fetchRandomEmoji);
     }
 
     if (downloadInstagramBtn) {
@@ -646,6 +716,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const idx = e.target.getAttribute('data-tweet-index');
             const el = document.getElementById(`tweet-text-${idx}`);
             if (el) copyToClipboard(el.textContent, e.target);
+        }
+        if (e.target.id === 'copy-thread') {
+            if (!twitterContent) return;
+            const thread = Array.from(twitterContent.querySelectorAll('.tweet-content'))
+                .map(el => el.textContent.trim())
+                .filter(Boolean)
+                .join('\n\n');
+            copyToClipboard(thread, e.target);
         }
         if (e.target.id === 'copy-linkedin') {
             if (linkedinContent) copyToClipboard(linkedinContent.textContent, e.target);
@@ -673,6 +751,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const copyToClipboard = (text, btn) => {
+        if (!text || !text.trim()) {
+            alert('Add some content before copying.');
+            return;
+        }
         navigator.clipboard.writeText(text).then(() => {
             const old = btn.textContent;
             btn.textContent = '✅ Copied!';
@@ -682,18 +764,50 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // Tabs & swipe
-    const tabsEls = document.querySelectorAll('.tab');
-    const setActiveTab = (name) => {
-        tabsEls.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
-        document.querySelectorAll('.output-panel').forEach(p => p.classList.toggle('active', p.id === `${name}-output`));
+    const order = ['twitter','linkedin','instagram','facebook','whatsapp'];
+    const tabArray = Array.from(tabs);
+    const setActiveTab = (name, options = {}) => {
+        tabArray.forEach((tab) => {
+            const isActive = tab.dataset.tab === name;
+            tab.classList.toggle('active', isActive);
+            tab.setAttribute('aria-selected', String(isActive));
+            tab.tabIndex = isActive ? 0 : -1;
+            if (isActive && options.scroll !== false) {
+                tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        });
+        outputPanels.forEach((panel) => {
+            const isActive = panel.id === `${name}-output`;
+            panel.classList.toggle('active', isActive);
+            panel.toggleAttribute('hidden', !isActive);
+        });
     };
-    tabsEls.forEach(tab => tab.addEventListener('click', () => setActiveTab(tab.dataset.tab)));
+    const activeIndex = () => {
+        const index = order.findIndex(k => document.getElementById(`${k}-output`)?.classList.contains('active'));
+        return index >= 0 ? index : 0;
+    };
+    tabArray.forEach((tab) => {
+        tab.addEventListener('click', () => setActiveTab(tab.dataset.tab));
+        tab.addEventListener('keydown', (e) => {
+            if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+            e.preventDefault();
+            const currentIndex = order.indexOf(tab.dataset.tab);
+            let nextIndex = currentIndex >= 0 ? currentIndex : 0;
+            if (e.key === 'ArrowLeft') nextIndex = Math.max(0, nextIndex - 1);
+            if (e.key === 'ArrowRight') nextIndex = Math.min(order.length - 1, nextIndex + 1);
+            if (e.key === 'Home') nextIndex = 0;
+            if (e.key === 'End') nextIndex = order.length - 1;
+            const nextName = order[nextIndex];
+            setActiveTab(nextName);
+            tabArray.find(t => t.dataset.tab === nextName)?.focus();
+        });
+    });
+    if (tabArray.length) {
+        setActiveTab(document.querySelector('.tab.active')?.dataset.tab || order[0], { scroll: false });
+    }
 
     let startX=0, startY=0, touching=false;
     const panelsContainer = document.querySelector('.output-section');
-    const order = ['twitter','linkedin','instagram','facebook','whatsapp'];
-    const activeIndex = () => order.findIndex(k => document.getElementById(`${k}-output`)?.classList.contains('active'));
 
     if (panelsContainer) {
         panelsContainer.addEventListener('touchstart', (e) => {
