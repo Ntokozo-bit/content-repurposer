@@ -72,7 +72,3 @@ Analytics and advertising scripts load only after the user accepts optional cook
 - Optional AI-powered rewriting mode
 - Shareable content packs
 - Improved export formats
-
-## License
-
-Copyright © RepurposerHub. See the repository license or website terms for permitted use.
