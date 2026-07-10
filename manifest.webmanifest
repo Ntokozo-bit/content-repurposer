@@ -1,0 +1,17 @@
+{
+  "name": "RepurposerHub",
+  "short_name": "RepurposerHub",
+  "description": "Turn one idea into platform-ready social posts.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f7fb",
+  "theme_color": "#5b5cf0",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
