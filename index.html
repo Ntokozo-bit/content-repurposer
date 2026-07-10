@@ -1,381 +1,369 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#ffffff">
-    <title>RepurposerHub – Turn one draft into platform-perfect posts</title>
-    <meta name="description" content="RepurposerHub turns one draft into Twitter/X, LinkedIn, Instagram, Facebook, and WhatsApp posts in seconds. Simple, fast, and free.">
-    <link rel="canonical" href="https://repurposerhub.org/">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#5b5cf0">
+  <title>RepurposerHub — Turn one idea into five social posts</title>
+  <meta name="description" content="Transform one draft into platform-ready posts for X, LinkedIn, Instagram, Facebook and WhatsApp. Free, private and browser-based.">
+  <link rel="canonical" href="https://repurposerhub.org/">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
 
-    <!-- Basic SEO / Social -->
-    <meta property="og:title" content="RepurposerHub">
-    <meta property="og:description" content="Paste once. Get platform-perfect posts instantly.">
-    <meta property="og:url" content="https://repurposerhub.org/">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://repurposerhub.org/og-cover.png">
-    <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:title" content="RepurposerHub — One idea. Five platform-ready posts.">
+  <meta property="og:description" content="A free, privacy-first social content repurposing workspace for creators and small teams.">
+  <meta property="og:url" content="https://repurposerhub.org/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://repurposerhub.org/og-cover.svg">
+  <meta name="twitter:card" content="summary_large_image">
 
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "RepurposerHub",
-        "url": "https://repurposerhub.org/",
-        "description": "Repurpose one draft into platform-ready posts for every major network."
-    }
-    </script>
-
-    <!-- Content Security Policy (allows GA + AdSense on static hosting) -->
-    <meta http-equiv="Content-Security-Policy" content="
-        default-src 'self';
-        img-src 'self' data: https:;
-        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-        font-src 'self' data: https://fonts.gstatic.com;
-        connect-src 'self' https://emojihub.yurace.pro https://www.google-analytics.com https://region1.google-analytics.com https://stats.g.doubleclick.net https://googleads.g.doubleclick.net https://adservice.google.com https://fundingchoicesmessages.google.com https://*.adtrafficquality.google;
-        script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://securepubads.g.doubleclick.net https://adservice.google.com;
-        frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://adservice.google.com https://fundingchoicesmessages.google.com;
-    ">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "RepurposerHub",
+    "url": "https://repurposerhub.org/",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "description": "Transform one draft into posts for X, LinkedIn, Instagram, Facebook and WhatsApp."
+  }
+  </script>
 </head>
 <body>
-    <noscript><div class="noscript">This tool needs JavaScript enabled.</div></noscript>
+  <a class="skip-link" href="#workspace">Skip to workspace</a>
 
-    <div class="consent-banner" id="consent-banner" role="region" aria-live="polite">
-        <div class="consent-copy">
-            <h2>We value your privacy</h2>
-            <p>RepurposerHub uses cookies to run analytics and Google AdSense so we can keep building free creator tools. Choose Accept to enable personalized ads and measurement, or Decline to continue with only essential features.</p>
-        </div>
-        <div class="consent-actions">
-            <button class="btn" id="consent-accept" type="button">Accept</button>
-            <button class="btn btn-outline" id="consent-decline" type="button">Decline</button>
-        </div>
+  <header class="site-nav">
+    <div class="nav-shell">
+      <a class="brand-mark" href="/" aria-label="RepurposerHub home">
+        <span class="brand-icon" aria-hidden="true">R</span>
+        <span>RepurposerHub</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#workspace">Workspace</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <button class="icon-button" id="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">☾</button>
     </div>
+  </header>
 
-    <header class="topbar">
-        <nav class="nav">
-            <a class="nav__brand" href="index.html">RepurposerHub 🚀</a>
-            <div class="nav__links">
-                <a class="nav__link nav__link--active" href="index.html">Home</a>
-                <a class="nav__link" href="about.html">About</a>
-                <a class="nav__link" href="privacy.html">Privacy</a>
-                <a class="nav__link" href="terms.html">Terms</a>
-                <a class="nav__link" href="disclaimer.html">Disclaimer</a>
-            </div>
-            <button id="theme-toggle" class="btn btn-ghost" aria-pressed="false" aria-label="Toggle dark mode">🌙</button>
-        </nav>
-    </header>
-
-    <div class="page">
-        <main class="container">
-            <header class="site-header">
-                <div class="brand">
-                    <h1>RepurposerHub</h1>
-                    <p>Paste once. Get platform-perfect posts for Twitter/X, LinkedIn, Instagram, Facebook, and WhatsApp.</p>
-                </div>
-                <div class="header-actions">
-                    <div class="tone-badge" id="tone-badge" title="Detected tone">Tone: —</div>
-                </div>
-            </header>
-
-            <div class="main-grid">
-                <!-- INPUT -->
-                <section class="input-section card" aria-labelledby="your-content">
-                    <div class="card-header card-header--split">
-                        <h2 id="your-content">Your Content</h2>
-                        <div class="card-actions" aria-label="Input actions">
-                            <button class="btn btn-small btn-outline" id="load-sample" type="button">Sample</button>
-                            <button class="btn btn-small btn-ghost" id="clear-input" type="button">Clear</button>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <textarea id="main-input" placeholder="Paste or write your content here. Use blank lines to separate topics. First line = title; next lines = body. One line = body-only."></textarea>
-
-                        <div class="input-toolbar">
-                            <div class="stats">
-                                <div class="stat"><span id="char-count" class="stat-value">0</span><span class="stat-label">Characters</span></div>
-                                <div class="stat"><span id="word-count" class="stat-value">0</span><span class="stat-label">Words</span></div>
-                                <div class="stat"><span id="read-time" class="stat-value">0</span><span class="stat-label">Min Read</span></div>
-                            </div>
-
-                            <div class="emoji-suggest">
-                                <div class="emoji-suggest__heading">
-                                    <span class="emoji-suggest__label">Emoji:</span>
-                                    <button class="emoji-refresh" id="emoji-refresh" type="button">More</button>
-                                </div>
-                                <div class="emoji-suggest__list" id="emoji-suggest"></div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- OUTPUT -->
-                <section class="output-section card" aria-label="Outputs">
-                    <div class="tabs sticky-tabs" role="tablist" aria-label="Platform outputs">
-                        <button class="tab active" id="twitter-tab" data-tab="twitter" role="tab" aria-selected="true" aria-controls="twitter-output">Twitter/X</button>
-                        <button class="tab" id="linkedin-tab" data-tab="linkedin" role="tab" aria-selected="false" aria-controls="linkedin-output" tabindex="-1">LinkedIn</button>
-                        <button class="tab" id="instagram-tab" data-tab="instagram" role="tab" aria-selected="false" aria-controls="instagram-output" tabindex="-1">Instagram</button>
-                        <button class="tab" id="facebook-tab" data-tab="facebook" role="tab" aria-selected="false" aria-controls="facebook-output" tabindex="-1">Facebook</button>
-                        <button class="tab" id="whatsapp-tab" data-tab="whatsapp" role="tab" aria-selected="false" aria-controls="whatsapp-output" tabindex="-1">WhatsApp</button>
-                    </div>
-
-                    <div class="swipe-hint">Tip: swipe or drag the tabs to switch platforms</div>
-
-                    <!-- Twitter -->
-                    <div id="twitter-output" class="output-panel active" role="tabpanel" aria-labelledby="twitter-tab">
-                        <div class="panel-tools">
-                            <div class="limit">
-                                <span>280</span>
-                                <div class="progress"><div id="tw-progress" class="progress__bar"></div></div>
-                            </div>
-                            <button class="btn" id="copy-thread">Copy Full Thread</button>
-                        </div>
-                        <div id="twitter-content" class="output-content">
-                            <p class="muted">Your generated thread will appear here...</p>
-                        </div>
-                    </div>
-
-                    <!-- LinkedIn -->
-                    <div id="linkedin-output" class="output-panel" role="tabpanel" aria-labelledby="linkedin-tab">
-                        <div class="panel-tools">
-                            <div class="limit">
-                                <span>~3000</span>
-                                <div class="progress"><div id="li-progress" class="progress__bar"></div></div>
-                            </div>
-                            <button class="btn" id="copy-linkedin">Copy LinkedIn Post</button>
-                        </div>
-                        <div id="linkedin-content" class="output-content"></div>
-                    </div>
-
-                    <!-- Instagram -->
-                    <div id="instagram-output" class="output-panel" role="tabpanel" aria-labelledby="instagram-tab">
-                        <div class="panel-tools">
-                            <div class="limit">
-                                <span>~2200</span>
-                                <div class="progress"><div id="ig-progress" class="progress__bar"></div></div>
-                            </div>
-                            <div class="panel-actions">
-                                <button class="btn" id="copy-instagram" type="button">Copy All Slide Text</button>
-                                <button class="btn btn-outline" id="download-instagram" type="button">Download Slides</button>
-                            </div>
-                        </div>
-                        <div id="instagram-content" class="output-content">
-                            <p class="muted">Your generated slides will appear here...</p>
-                        </div>
-                    </div>
-
-                    <!-- Facebook -->
-                    <div id="facebook-output" class="output-panel" role="tabpanel" aria-labelledby="facebook-tab">
-                        <div class="panel-tools">
-                            <div class="limit">
-                                <span>~1500</span>
-                                <div class="progress"><div id="fb-progress" class="progress__bar"></div></div>
-                            </div>
-                            <button class="btn" id="copy-facebook" type="button">Copy Facebook Post</button>
-                        </div>
-                        <div id="facebook-content" class="output-content">
-                            <p class="muted">A Facebook-ready story will appear here...</p>
-                        </div>
-                    </div>
-
-                    <!-- WhatsApp -->
-                    <div id="whatsapp-output" class="output-panel" role="tabpanel" aria-labelledby="whatsapp-tab">
-                        <div class="panel-tools">
-                            <div class="limit">
-                                <span>~1200</span>
-                                <div class="progress"><div id="wa-progress" class="progress__bar"></div></div>
-                            </div>
-                            <button class="btn" id="copy-whatsapp" type="button">Copy WhatsApp Update</button>
-                        </div>
-                        <div id="whatsapp-content" class="output-content">
-                            <p class="muted">Short-form WhatsApp copy appears here...</p>
-                        </div>
-                    </div>
-
-                </section>
-            </div>
-
-            <section class="card ad-card" aria-label="Sponsored placement">
-                <div class="card-content">
-                    <div class="ad-card__intro">
-                        <span class="badge">Sponsored</span>
-                        <div>
-                            <h2>Partners that creators love</h2>
-                            <p class="muted">Privacy-safe ads keep RepurposerHub fast and free for solo marketers and teams.</p>
-                        </div>
-                    </div>
-                    <ins class="adsbygoogle ad-slot"
-                        style="display:block"
-                        data-ad-client="ca-pub-7179154805169763"
-                        data-ad-slot="4018273951"
-                        data-ad-format="auto"
-                        data-full-width-responsive="true"
-                        aria-label="Advertisement area"></ins>
-                    <p class="muted ad-note">You will only see ads after accepting cookies so we can respect your preferences.</p>
-                </div>
-            </section>
-
-            <!-- How it works / Instructions (helps reviewers + SEO) -->
-            <section class="card">
-                <div class="card-header"><h2>How RepurposerHub Works (simple)</h2></div>
-                <div class="card-content">
-                    <ol>
-                        <li>Paste your draft in the big box.</li>
-                        <li>We split it nicely for Twitter/X, LinkedIn, Instagram, Facebook, and WhatsApp.</li>
-                        <li>Tap “Copy” on each platform to paste on your socials.</li>
-                        <li>Follow the tips in each tab to stay within limits.</li>
-                    </ol>
-                </div>
-            </section>
-
-            <!-- FAQ (adds helpful content) -->
-            <section class="card">
-                <div class="card-header"><h2>FAQ</h2></div>
-                <div class="card-content">
-                    <h3>Is my text saved?</h3>
-                    <p>No. Everything happens in your browser. We don’t store your text.</p>
-                    <h3>Is RepurposerHub free?</h3>
-                    <p>Yes. We support the site with ads.</p>
-                    <h3>Who can use it?</h3>
-                    <p>Creators, marketers, and anyone posting across multiple platforms.</p>
-                </div>
-            </section>
-
-            <section class="card long-form">
-                <div class="card-header"><h2>Creator Playbooks</h2></div>
-                <div class="card-content">
-                    <p>Repurpose with intent. These ready-made flows keep your publishing cadence consistent while still feeling personal.</p>
-                    <div class="playbook-grid">
-                        <article class="playbook">
-                            <h3>Launch Week Stack</h3>
-                            <p>Turn a long-form announcement into: a hero LinkedIn post, a 4-tweet teaser thread, and a carousel outlining your roadmap.</p>
-                            <ul>
-                                <li>Start with a benefit-driven title.</li>
-                                <li>Use numbered steps for each carousel slide.</li>
-                                <li>Close every channel with a single CTA.</li>
-                            </ul>
-                        </article>
-                        <article class="playbook">
-                            <h3>Authority Thread</h3>
-                            <p>Summarize one insight per block. RepurposerHub caps each tweet and mirrors it into LinkedIn paragraphs for easy copy/paste.</p>
-                            <ul>
-                                <li>Lead with the problem in tweet one.</li>
-                                <li>Stack 3 proof points pulled from your draft.</li>
-                                <li>End with a conversational micro-story.</li>
-                            </ul>
-                        </article>
-                        <article class="playbook">
-                            <h3>Carousel Classroom</h3>
-                            <p>Break lessons into 5-7 slides. Each slide gets a bold title plus a supporting sentence so your Instagram saves skyrocket.</p>
-                            <ul>
-                                <li>Name the transformation in the slide title.</li>
-                                <li>Keep supporting copy under 40 words.</li>
-                                <li>Use emojis sparingly to highlight verbs.</li>
-                            </ul>
-                        </article>
-                    </div>
-                </div>
-            </section>
-
-            <section class="card long-form">
-                <div class="card-header"><h2>Organic Growth Checklist</h2></div>
-                <div class="card-content">
-                    <div class="checklist-grid">
-                        <div>
-                            <h3>Before Publishing</h3>
-                            <ul>
-                                <li>Verify your hook is under 90 characters and states a clear benefit.</li>
-                                <li>Highlight one proof element (metric, quote, or short example).</li>
-                                <li>Add an internal link or CTA that continues the story.</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3>After Publishing</h3>
-                            <ul>
-                                <li>Reply to the first three comments within 30 minutes.</li>
-                                <li>Stack native formats (thread + carousel) on the same day for momentum.</li>
-                                <li>Log top-performing angles in your swipe file for future drafts.</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <p>Follow this loop for 30 days and you will have enough validated angles to turn into automated campaigns, emails, or even sponsorship pitches.</p>
-                </div>
-            </section>
-
-            <section class="card long-form">
-                <div class="card-header"><h2>Community Stories & Data</h2></div>
-                <div class="card-content">
-                    <p>We track anonymous engagement data (only after consent) to understand what helps you the most.</p>
-                    <div class="stats-grid">
-                        <div>
-                            <strong>+47%</strong>
-                            <p class="muted">Average lift in LinkedIn comments after users adopted the repurposed intro framework.</p>
-                        </div>
-                        <div>
-                            <strong>12 hrs</strong>
-                            <p class="muted">Weekly time saved by creators who publish across three channels from one RepurposerHub draft.</p>
-                        </div>
-                        <div>
-                            <strong>28K</strong>
-                            <p class="muted">Slides exported this quarter for Instagram carousels, now in brand colors with one click.</p>
-                        </div>
-                    </div>
-                    <blockquote class="testimonial">“RepurposerHub gave us a repeatable workflow. The Instagram downloads alone landed us two new clients.” — Alia, studio founder</blockquote>
-                </div>
-            </section>
-
-            <section class="card gradient-card">
-                <div class="card-header"><h2>Channel Launchpad</h2></div>
-                <div class="card-content">
-                    <p>Mix and match these lightweight playbooks when you need to spin up a new format fast.</p>
-                    <div class="feature-grid">
-                        <article class="feature-tile">
-                            <div class="feature-icon">📘</div>
-                            <h3>Facebook Focus</h3>
-                            <p>Hook readers with a question, deliver 2 quick wins, and invite discussion with a simple prompt like “Drop a ✋ if this landed.”</p>
-                        </article>
-                        <article class="feature-tile">
-                            <div class="feature-icon">💬</div>
-                            <h3>WhatsApp Circle</h3>
-                            <p>Share a 3-line update, 2 bullet tips, and 1 action link. Keep sentences punchy so they fit the mobile bubble.</p>
-                        </article>
-                        <article class="feature-tile">
-                            <div class="feature-icon">📝</div>
-                            <h3>Blog Booster</h3>
-                            <p>Use each draft section as an H2, then add a “lesson learned” paragraph plus a CTA that ties back to your offer.</p>
-                        </article>
-                        <article class="feature-tile">
-                            <div class="feature-icon">✨</div>
-                            <h3>Repurpose Remix</h3>
-                            <p>Rotate the same story across Twitter, LinkedIn, Instagram, Facebook, and WhatsApp with one click above. Consistency wins algorithms.</p>
-                        </article>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <footer class="site-footer">
-        <div class="footer__links">
-            <a href="index.html">Home</a>
-            <span>•</span>
-            <a href="about.html">About</a>
-            <span>•</span>
-            <a href="privacy.html">Privacy Policy</a>
-            <span>•</span>
-            <a href="terms.html">Terms</a>
-            <span>•</span>
-            <a href="disclaimer.html">Disclaimer</a>
-            <span>•</span>
-            <button class="link-button" id="manage-consent" type="button">Cookie settings</button>
+  <main>
+    <section class="hero">
+      <div class="hero-glow hero-glow--one"></div>
+      <div class="hero-glow hero-glow--two"></div>
+      <div class="hero-copy">
+        <span class="eyebrow">FREE · PRIVATE · NO SIGN-UP</span>
+        <h1>One idea.<br><span>Five native posts.</span></h1>
+        <p>Stop rewriting the same message for every platform. Shape one draft into ready-to-edit content for X, LinkedIn, Instagram, Facebook and WhatsApp.</p>
+        <div class="hero-actions">
+          <a class="button button--primary" href="#workspace">Start repurposing</a>
+          <button class="button button--secondary" id="hero-sample" type="button">See an example</button>
         </div>
-        <div class="footer__copy">&copy; <span id="year"></span> RepurposerHub.</div>
-    </footer>
+        <div class="trust-row" aria-label="Product benefits">
+          <span>✓ Runs in your browser</span>
+          <span>✓ Your draft stays on your device</span>
+          <span>✓ Export everything in one click</span>
+        </div>
+      </div>
 
-    <script src="config.js"></script>
-    <script src="analytics.js" defer></script>
-    <script src="script.js"></script>
+      <div class="hero-preview" aria-label="Example transformation">
+        <div class="preview-window">
+          <div class="preview-topbar">
+            <span></span><span></span><span></span>
+            <small>Live preview</small>
+          </div>
+          <div class="preview-input">
+            <span class="preview-label">YOUR IDEA</span>
+            <p>Most creators do not need more ideas. They need a better system for using the ideas they already have.</p>
+          </div>
+          <div class="preview-arrow" aria-hidden="true">↓</div>
+          <div class="preview-output">
+            <span class="platform-pill platform-pill--linkedin">in</span>
+            <div>
+              <strong>You probably do not have an idea problem.</strong>
+              <p>You have a distribution problem. One strong insight can become a week of useful content...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="workspace-section" id="workspace">
+      <div class="section-heading">
+        <span class="eyebrow">CONTENT WORKSPACE</span>
+        <h2>Build your content pack</h2>
+        <p>Choose how the posts should sound, paste your source content and generate platform-specific drafts.</p>
+      </div>
+
+      <div class="workspace">
+        <aside class="settings-panel" aria-label="Generation settings">
+          <div class="panel-title">
+            <div>
+              <span class="step-number">1</span>
+              <h3>Set the direction</h3>
+            </div>
+            <button class="text-button" id="reset-settings" type="button">Reset</button>
+          </div>
+
+          <label class="field">
+            <span>Content goal</span>
+            <select id="goal">
+              <option value="educate">Educate</option>
+              <option value="promote">Promote</option>
+              <option value="announce">Announce</option>
+              <option value="engage">Start a conversation</option>
+              <option value="story">Tell a story</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Tone</span>
+            <select id="tone">
+              <option value="professional">Professional</option>
+              <option value="casual">Casual</option>
+              <option value="bold">Bold</option>
+              <option value="friendly">Friendly</option>
+              <option value="inspiring">Inspiring</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Audience <small>optional</small></span>
+            <input id="audience" type="text" maxlength="80" placeholder="e.g. freelance designers">
+          </label>
+
+          <label class="field">
+            <span>Call to action <small>optional</small></span>
+            <input id="cta" type="text" maxlength="120" placeholder="e.g. Try the free tool">
+          </label>
+
+          <div class="field">
+            <span>Post length</span>
+            <div class="segmented" role="group" aria-label="Post length">
+              <button type="button" data-setting="length" data-value="short">Short</button>
+              <button type="button" data-setting="length" data-value="medium" class="is-active">Medium</button>
+              <button type="button" data-setting="length" data-value="long">Long</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <span>Emoji level</span>
+            <div class="segmented" role="group" aria-label="Emoji level">
+              <button type="button" data-setting="emoji" data-value="none">None</button>
+              <button type="button" data-setting="emoji" data-value="light" class="is-active">Light</button>
+              <button type="button" data-setting="emoji" data-value="more">More</button>
+            </div>
+          </div>
+
+          <label class="switch-row">
+            <span>
+              <strong>Add relevant hashtags</strong>
+              <small>Generated from your source text</small>
+            </span>
+            <input id="hashtags" type="checkbox" checked>
+            <i aria-hidden="true"></i>
+          </label>
+        </aside>
+
+        <section class="composer-panel">
+          <div class="panel-title">
+            <div>
+              <span class="step-number">2</span>
+              <h3>Add your source content</h3>
+            </div>
+            <div class="inline-actions">
+              <button class="text-button" id="load-sample" type="button">Use sample</button>
+              <button class="text-button text-button--muted" id="clear-input" type="button">Clear</button>
+            </div>
+          </div>
+
+          <label class="sr-only" for="main-input">Source content</label>
+          <textarea id="main-input" maxlength="12000" placeholder="Paste a blog post, transcript, announcement, rough note or idea here...
+
+Tip: include the key message, useful details and the action you want readers to take."></textarea>
+
+          <div class="composer-footer">
+            <div class="input-stats" aria-live="polite">
+              <span><strong id="word-count">0</strong> words</span>
+              <span><strong id="char-count">0</strong> characters</span>
+              <span><strong id="read-time">0</strong> min read</span>
+            </div>
+            <span class="draft-status" id="draft-status">Saved on this device</span>
+          </div>
+
+          <button class="generate-button" id="generate" type="button">
+            <span class="generate-icon" aria-hidden="true">✦</span>
+            <span>Generate content pack</span>
+            <kbd>Ctrl ↵</kbd>
+          </button>
+          <p class="privacy-line">Your draft is processed locally in this browser. It is not uploaded to our servers.</p>
+        </section>
+      </div>
+
+      <section class="results" id="results" hidden aria-live="polite">
+        <div class="results-heading">
+          <div>
+            <span class="eyebrow">YOUR CONTENT PACK</span>
+            <h2>Five drafts, ready to refine</h2>
+          </div>
+          <div class="results-actions">
+            <button class="button button--secondary button--small" id="new-variation" type="button">New variation</button>
+            <button class="button button--dark button--small" id="download-all" type="button">Download all</button>
+          </div>
+        </div>
+
+        <div class="platform-tabs" role="tablist" aria-label="Generated platform content">
+          <button class="platform-tab is-active" type="button" role="tab" aria-selected="true" data-platform="twitter">X / Twitter</button>
+          <button class="platform-tab" type="button" role="tab" aria-selected="false" data-platform="linkedin">LinkedIn</button>
+          <button class="platform-tab" type="button" role="tab" aria-selected="false" data-platform="instagram">Instagram</button>
+          <button class="platform-tab" type="button" role="tab" aria-selected="false" data-platform="facebook">Facebook</button>
+          <button class="platform-tab" type="button" role="tab" aria-selected="false" data-platform="whatsapp">WhatsApp</button>
+        </div>
+
+        <div class="output-shell">
+          <div class="output-toolbar">
+            <div class="output-platform">
+              <span class="output-icon" id="output-icon" aria-hidden="true">𝕏</span>
+              <div>
+                <strong id="output-title">X thread</strong>
+                <small id="output-hint">Short, punchy and easy to scan</small>
+              </div>
+            </div>
+            <div class="output-meta">
+              <span id="output-count">0 characters</span>
+              <button class="button button--secondary button--small" id="copy-output" type="button">Copy</button>
+            </div>
+          </div>
+          <label class="sr-only" for="output-editor">Generated output</label>
+          <textarea id="output-editor" spellcheck="true"></textarea>
+          <div class="edit-note">You can edit the generated draft before copying it.</div>
+        </div>
+
+        <div class="all-output-grid" id="all-output-grid"></div>
+      </section>
+    </section>
+
+    <section class="benefits" id="how-it-works">
+      <div class="section-heading">
+        <span class="eyebrow">WHY IT WORKS</span>
+        <h2>Same message. Better fit.</h2>
+        <p>Repurposing is not copying the same paragraph everywhere. Each platform gets a structure designed for how people read there.</p>
+      </div>
+      <div class="benefit-grid">
+        <article>
+          <span class="benefit-icon">01</span>
+          <h3>Start with one source</h3>
+          <p>Use a transcript, article, announcement, rough note or any idea worth sharing.</p>
+        </article>
+        <article>
+          <span class="benefit-icon">02</span>
+          <h3>Shape the message</h3>
+          <p>Choose the goal, tone, audience, length and call to action before generating.</p>
+        </article>
+        <article>
+          <span class="benefit-icon">03</span>
+          <h3>Edit and publish</h3>
+          <p>Fine-tune every draft, copy individual posts or download the complete content pack.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="use-cases">
+      <div class="use-case-copy">
+        <span class="eyebrow">BUILT FOR REAL WORK</span>
+        <h2>Turn unfinished ideas into a publishing system.</h2>
+        <p>RepurposerHub is useful when you have something worth saying but do not want to start from zero five times.</p>
+      </div>
+      <div class="use-case-list">
+        <div><span>🎙️</span><strong>Podcast & video transcripts</strong><small>Pull the strongest ideas into short social posts.</small></div>
+        <div><span>📝</span><strong>Blog posts & newsletters</strong><small>Extend the life of long-form writing.</small></div>
+        <div><span>📣</span><strong>Product announcements</strong><small>Adapt one launch message across channels.</small></div>
+        <div><span>💡</span><strong>Rough notes & insights</strong><small>Turn an unfinished thought into usable drafts.</small></div>
+      </div>
+    </section>
+
+    <section class="faq-section" id="faq">
+      <div class="section-heading">
+        <span class="eyebrow">FAQ</span>
+        <h2>Good to know</h2>
+      </div>
+      <div class="faq-list">
+        <details>
+          <summary>Is RepurposerHub really free?</summary>
+          <p>Yes. The core browser-based tool is free to use without creating an account.</p>
+        </details>
+        <details>
+          <summary>Is my content sent to a server?</summary>
+          <p>No. This version processes the text in your browser. Your draft can be saved in local browser storage so you can continue later, but it is not uploaded to our servers.</p>
+        </details>
+        <details>
+          <summary>Does it use artificial intelligence?</summary>
+          <p>The free version uses a local rule-based writing engine. It restructures and adapts your content without sending it to an external AI provider.</p>
+        </details>
+        <details>
+          <summary>Can I edit the generated posts?</summary>
+          <p>Yes. Every result is editable. Treat the output as a strong first draft and add your own voice before publishing.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div>
+        <span class="eyebrow eyebrow--light">READY WHEN YOU ARE</span>
+        <h2>Make your next idea work harder.</h2>
+        <p>Paste it once. Leave with a complete social content pack.</p>
+      </div>
+      <a class="button button--light" href="#workspace">Open the workspace</a>
+    </section>
+
+    <section class="ad-section" aria-label="Advertisement">
+      <div class="ad-label">Advertisement</div>
+      <ins class="adsbygoogle ad-slot"
+        style="display:block"
+        data-ad-client="ca-pub-7179154805169763"
+        data-ad-slot="4018273951"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-main">
+      <a class="brand-mark brand-mark--footer" href="/">
+        <span class="brand-icon" aria-hidden="true">R</span>
+        <span>RepurposerHub</span>
+      </a>
+      <p>A free, privacy-first content repurposing workspace built for creators, marketers and small teams.</p>
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="disclaimer.html">Disclaimer</a>
+        <button id="manage-consent" type="button">Cookie settings</button>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> RepurposerHub</span>
+      <span>Made with care in South Africa.</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="consent-banner" id="consent-banner" role="dialog" aria-label="Cookie preferences" aria-modal="false">
+    <div>
+      <strong>Your privacy, your choice</strong>
+      <p>Essential browser storage keeps your draft and settings. With permission, analytics and ads help support this free tool.</p>
+    </div>
+    <div class="consent-actions">
+      <button class="button button--secondary button--small" id="consent-decline" type="button">Essential only</button>
+      <button class="button button--primary button--small" id="consent-accept" type="button">Accept</button>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

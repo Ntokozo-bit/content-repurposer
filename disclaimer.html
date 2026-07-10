@@ -1,69 +1,85 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disclaimer – RepurposerHub</title>
-    <meta name="description" content="Disclaimer for RepurposerHub.">
-    <link rel="canonical" href="https://repurposerhub.org/disclaimer.html">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#5b5cf0">
+  <title>Disclaimer — RepurposerHub</title>
+  <meta name="description" content="Important information about generated drafts, publishing decisions and advertisements on RepurposerHub.">
+  <link rel="canonical" href="https://repurposerhub.org/disclaimer.html">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="pages.css">
 </head>
 <body>
-    <header class="topbar">
-        <nav class="nav">
-            <a class="nav__brand" href="index.html">RepurposerHub 🚀</a>
-            <div class="nav__links">
-                <a class="nav__link" href="index.html">Home</a>
-                <a class="nav__link" href="about.html">About</a>
-                <a class="nav__link" href="privacy.html">Privacy</a>
-                <a class="nav__link" href="terms.html">Terms</a>
-                <a class="nav__link nav__link--active" href="disclaimer.html">Disclaimer</a>
-            </div>
-            <button id="theme-toggle" class="btn btn-ghost" aria-pressed="false" aria-label="Toggle dark mode">🌙</button>
-        </nav>
+  <header class="site-nav">
+    <div class="nav-shell">
+      <a class="brand-mark" href="index.html" aria-label="RepurposerHub home">
+        <span class="brand-icon" aria-hidden="true">R</span>
+        <span>RepurposerHub</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="privacy.html">Privacy</a>
+      </nav>
+      <button class="icon-button" id="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">☾</button>
+    </div>
+  </header>
+
+  <main class="legal-main">
+    <header class="legal-hero">
+      <span class="eyebrow">DISCLAIMER</span>
+      <h1>Review before you publish.</h1>
+      <p>Last updated: July 10, 2026</p>
     </header>
 
-    <div class="page">
-        <main class="container">
-            <header class="site-header">
-                <div class="brand">
-                    <h1>Disclaimer</h1>
-                    <p>Last updated: October 4, 2025</p>
-                </div>
-            </header>
+    <div class="legal-stack">
+      <section class="legal-card">
+        <h2>Generated drafts</h2>
+        <p>RepurposerHub produces writing suggestions and formatting assistance. The output may be incomplete, repetitive, inaccurate, unsuitable for a particular audience or inconsistent with the rules of a social platform.</p>
+        <p>You are responsible for reviewing, editing and approving every draft before publishing it.</p>
+      </section>
 
-            <section class="card">
-                <div class="card-content">
-                    <p>
-                        The information and tools on RepurposerHub are provided for general informational purposes only.
-                        We do not guarantee results. You are responsible for reviewing and editing your posts before publishing.
-                    </p>
-                    <p>
-                        We may display advertisements to support the service. Ads do not mean we endorse the products or services shown.
-                    </p>
-                </div>
-            </section>
-        </main>
+      <section class="legal-card">
+        <h2>No professional advice</h2>
+        <p>Content generated or displayed through RepurposerHub is not legal, financial, medical or other professional advice. Seek a qualified professional when a decision requires specialist advice.</p>
+      </section>
+
+      <section class="legal-card">
+        <h2>No performance guarantee</h2>
+        <p>Using the service does not guarantee views, engagement, followers, sales, search rankings, revenue or any other result. Outcomes depend on many factors outside RepurposerHub's control.</p>
+      </section>
+
+      <section class="legal-card">
+        <h2>Platform rules</h2>
+        <p>Social networks can change their character limits, policies, features and recommendation systems. Check the current rules of each platform before publishing.</p>
+      </section>
+
+      <section class="legal-card">
+        <h2>Advertising and external links</h2>
+        <p>RepurposerHub may display third-party advertisements or links. Their presence does not mean that RepurposerHub endorses the advertised product, company, claim or external website.</p>
+      </section>
+
+      <section class="legal-card">
+        <h2>Contact</h2>
+        <p>Questions can be sent to <a href="mailto:ntokozolms10@gmail.com">ntokozolms10@gmail.com</a>.</p>
+      </section>
     </div>
+  </main>
 
-    <footer class="site-footer">
-        <div class="footer__links">
-            <a href="index.html">Home</a>
-            <span>•</span>
-            <a href="about.html">About</a>
-            <span>•</span>
-            <a href="privacy.html">Privacy Policy</a>
-            <span>•</span>
-            <a href="terms.html">Terms</a>
-            <span>•</span>
-            <a href="disclaimer.html">Disclaimer</a>
-        </div>
-        <div class="footer__copy">&copy; <span id="year"></span> RepurposerHub.</div>
-    </footer>
-
-    <script src="config.js"></script>
-    <script src="analytics.js" defer></script>
-    <script src="script.js"></script>
+  <footer class="static-footer">
+    <div class="static-footer__inner">
+      <span>© <span id="year"></span> RepurposerHub</span>
+      <div class="static-footer__links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="disclaimer.html">Disclaimer</a>
+      </div>
+    </div>
+  </footer>
+  <script src="pages.js"></script>
 </body>
 </html>
