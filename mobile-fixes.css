@@ -1,0 +1,55 @@
+/* Small-screen layout fixes loaded after the main stylesheet. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.consent-banner {
+  box-sizing: border-box;
+  max-width: calc(100vw - 24px);
+  overflow: hidden;
+}
+
+.consent-banner > *,
+.consent-actions,
+.consent-actions > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.consent-banner p {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 700px) {
+  .consent-banner,
+  .consent-banner.is-visible {
+    left: 12px;
+    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    width: auto;
+    max-width: none;
+    padding: 16px;
+    gap: 14px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .consent-actions {
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .consent-actions .button {
+    width: 100%;
+    min-width: 0;
+    padding-inline: 10px;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 380px) {
+  .consent-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
